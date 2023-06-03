@@ -1,0 +1,362 @@
+{% extends "sidebar.html" %}
+
+
+
+{% block content %}
+
+
+
+{% if wishlist_status %}
+<div class="wlist-container">
+
+
+  <div class="wlist2" id="success-message2">
+    <div class="wlist-info2 fade-in2">
+
+      <h4 style="color:rgb(36, 36, 36);opacity: 0.8;font-size: 1.4rem;margin:0px auto 40px; font-weight: 700;">Your
+        wishlist is submitted. </h4>
+
+      <div class="addnew" style="display: flex; justify-content: flex-end; margin-right: 7%;">
+        <span class="sm-quote" style="margin-right: 2%;">Print this page?</span>
+        <button class="btn btn-outline-primary" id="generate-print" style="font-size: 14px; padding: 5px;">Generate
+          Report</button>
+      </div>
+
+      {% for info in wishlist_status %}
+      <div style="margin-top: 20px;">
+        <div class="wlist-container">
+          <div class="wlist">
+
+            <div class="wlist-preview">
+              <h3 style="margin-bottom: 20px;"><small>Project ID:</small> {{info.project_id}}</h3>
+
+              <h1>{{info.project_title}} </h1>
+
+              <h3 style="margin-top: 30px;">{{info.mentor_name}} </h3>
+            </div>
+
+            <div class="wlist-info">
+              <h3 style="font-size: 0.95rem;font-weight: 700;">
+                <span style="color:rgb(64, 64, 211);font-weight: 500;display:block;text-align:left;overflow: hidden;">
+                  Ranking: {{info.ranking}} --
+                  {{info.submission_status}}</span>
+              </h3>
+              <p style="font-weight: 600;">Company: {{info.company_name}}</p>
+
+              <div>
+                <p>{{info.project_summary}}</p>
+              </div>
+              <br>
+              <br>
+
+              <div style="display:flex;">
+                <h3><span style="color:rgb(64, 64, 211);font-weight: 500;"></span></h3>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+      {% endfor %}
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const generatePdfButton = document.getElementById('generate-print');
+
+    generatePdfButton.addEventListener('click', () => {
+      const printContents = document.getElementById('success-message2');
+
+      // html2pdf to convert html into pdf
+      html2pdf()
+        .from(printContents)
+        .set({
+          filename: 'wishlist.pdf',
+          margin: [10, 10, 10, 10],
+          jsPDF: {
+            unit: 'mm',
+            format: 'a4',
+            orientation: 'landscape'
+          }
+        })
+        .output('dataurlnewwindow');
+    });
+  });
+</script>
+
+
+
+{% elif wishlist_info %}
+{% set rank_total = wishlist_info | length %}
+<form action="{{url_for('student.wishlist')}}" method="POST" id="formwishlist">
+
+  <div class="wlist-info2">
+    <h4 style="font-size: 1.75rem;">My Wishlist</h4>
+  </div>
+
+  <p style="margin-left: 160px;font-style: italic;font-weight: 500;color:rgb(92, 92, 163);margin-top: 50px;">
+    * Click box to add wishlist
+  </p>
+
+  <div class="wlist-container">
+    <div class="wlist2">
+      <div class="wlist-checkbox-container2">
+        <p style="font-weight: 500;color:rgb(92, 92, 163);margin:0">Select All</p>
+        <input type="checkbox" id="select-all" class="wlist-checkbox-container">
+        <label class="wlist-checkbox-label"></label>
+      </div>
+    </div>
+  </div>
+
+
+
+  {% for info in wishlist_info %}
+
+  <div class="wlist-container">
+    <div class="wlist">
+
+      <div class="wlist-checkbox-container">
+        <input type="checkbox" name="wishlist[]" value="{{info.project_id}}" class="wlist-checkbox">
+        <label class="wlist-checkbox-label"></label>
+      </div>
+
+      <div class="wlist-preview">
+        <!-- <h3><small>Ranking:</small> {{info.ranking}}</h3> -->
+        <h3><small>Project ID:</small> {{info.project_id}}</h3>
+
+        <h1>{{info.project_title}} </h1>
+        <h3>{{info.mentor_name}} </h3>
+      </div>
+
+      <div class="wlist-info">
+        <div class="close-button">
+          <a href="{{url_for('student.wishlist_control')}}?project_id={{info.project_id}}&remove=1" class="btn btn-link"
+            role="button"><i class="bi bi-x"></i></a>
+        </div>
+
+        <h3 style="font-weight: 700;">Company: {{info.company_name}}</h3>
+
+        <p>{{info.project_summary}}</p>
+        <br>
+
+        <div style="display:flex;">
+          <h3><span style="color:rgb(73, 73, 230); font-weight: 700;">Status:
+              {{info.submission_status}}</span></h3>
+        </div>
+
+        <div style="margin-top: 30px;">
+          <span style="font-weight: 500;height:30px;">Select Ranking:
+            <select id="ranking-select-{{info.project_id}}" required name="ranking[]">
+              <option value="" selected disabled>Select Ranking</option>
+              {% for i in range(1, rank_total+1) %}
+              <option value="{{ i }}">Ranking: {{ i }}</option>
+              {% endfor %}
+            </select>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  {% endfor %}
+
+  <div class="wlist-info2" style="margin-top: 100px;">
+    <input type="submit" value="Submit" class="btn btn-outline-primary profilebt"
+      style="margin-right: 10px;width:150px;" id="submitwishlist">
+    <input type="reset" value="Reset" class="btn btn-outline-primary profilebt" style="width:150px;">
+  </div>
+
+</form>
+
+
+<script>
+  // select all button event
+  const selectAllCheckbox = document.getElementById("select-all");
+  const wishlistCheckboxes = document.querySelectorAll(".wlist-checkbox");
+
+  selectAllCheckbox.addEventListener("change", function () {
+    wishlistCheckboxes.forEach(checkbox => {
+      checkbox.checked = this.checked;
+    });
+  });
+
+  wishlistCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener("change", function () {
+      if (!this.checked) {
+        selectAllCheckbox.checked = false;
+      }
+      else if (document.querySelectorAll(".wlist-checkbox:checked").length === wishlistCheckboxes.length) {
+        selectAllCheckbox.checked = true;
+      }
+    });
+  });
+
+
+  // must select at least 3 items
+  document.querySelector('form').addEventListener('submit', function (e) {
+    const selectedCount = document.querySelectorAll('.wlist-checkbox:checked').length;
+    const selectedRankings = Array.from(document.querySelectorAll('.wlist-checkbox:checked')).map(checkbox => {
+      const projectId = checkbox.value;
+      const rankingValue = document.getElementById(`ranking-select-${projectId}`).value;
+      return rankingValue;
+    });
+
+    if (selectedCount < 3) {
+      e.preventDefault();
+      alert('Please select at least 3 projects');
+    } else if (hasDuplicates(selectedRankings)) {
+      e.preventDefault();
+      alert('Ranking values cannot be duplicated');
+    }
+  });
+
+  function hasDuplicates(array) {
+    return (new Set(array)).size !== array.length;
+  }
+
+
+
+
+</script>
+
+{% elif empty %}
+
+
+<div class="cart">
+  <img class="cart-image" src="../../static/img/cart.png" alt="Empty Cart">
+  <p style="font-size: 1.25rem;text-align: center;font-weight: 500;">You have No Projects in your Wishlist...</p>
+
+  <!-- <h4 style="color:rgb(92, 92, 227);font-size: 1.75rem;text-align: center;">Empty Wishlist</h4> -->
+
+</div>
+
+
+
+<div style="text-align: center;margin-top: 50px;">
+  <a href="{{url_for('student.all_projects')}}" role="button" class="btn btn-outline-primary profilebt"> Check All
+    Projects</a>
+</div>
+
+{% endif %}
+
+
+
+
+
+{% if placements %}
+
+<div class="timeline">
+  {% for item in status_list %}
+  <div class="timeline-item">
+    <div class="timeline-item-content">
+      {% if placements['status'] == item %}
+      <h2 class="timeline-item-title" style="color:rgb(50, 50, 226);font-size: 18px;font-weight: 700;">
+        {% else %}
+        <h2 class="timeline-item-title">
+          {% endif %}
+          {{item}}
+        </h2>
+    </div>
+  </div>
+  {% endfor %}
+  <div class="timeline-line"></div>
+</div>
+
+
+{% if placements['status'] == 'No Placements' %}
+
+<h4 style="font-size: 1.55rem;text-align: center;margin-top: 50px;">You have no Projects Submitted...
+</h4>
+<div style="text-align: center;margin-top: 50px;">
+  <a href="{{url_for('student.wishlist')}}" role="button" class="btn btn-outline-primary profilebt"> Check My
+    Wishlist</a>
+</div>
+
+{% elif placements['status'] == 'Processing' %}
+
+<div class="loading-container" style="height:100%;">
+  <!-- <div class="loading-animation"></div> -->
+  <h4 class="loading-text" style="margin-top: 50px;color:rgb(92, 92, 163)">We are processing your application...</h4>
+</div>
+
+<div style="margin-top: 50px;text-align: center;">
+  <a href="{{url_for('student.wishlist')}}" class="btn btn-outline-primary profilebt">View Your Submission</a>
+  <!-- for later notification url -->
+  <a href="#" class="btn btn-outline-primary profilebt" style="margin-left: 10px;">Check Recent News</a>
+
+</div>
+
+
+{% elif placements['status'] == 'Matched' %}
+
+
+<h3 class="scd-text">{{placements.first_name}} Placement Information</h3>
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-12">
+      <article class="blog-card">
+        <div class="blog-card__background">
+          <div class="card__background--wrapper">
+            <div class="card__background--main" style="background-image: url('../../static/img/sky.jpg');">
+              <div class="card__background--layer"></div>
+            </div>
+          </div>
+        </div>
+        <div class="blog-card__head">
+          <span class="date__box">
+            <span class="date__day">15</span>
+            <span class="date__month">JUL</span>
+          </span>
+        </div>
+        <div class="blog-card__info">
+          <h5>{{placements.project_title}}</h5>
+          <p>
+            <a class="icon-link"><i class="bi bi-calendar-event"></i> {{placements.start_date}}
+            </a> <a>{{placements.mentor_name}}</a>
+          </p>
+          <h5>Company Name: </h5>
+          <p>{{placements.company_name}}</p>
+          <h5>Project Summary: </h5>
+          <p>{{placements.project_summary}}</p>
+          <h5>Skills Required: </h5>
+          <p>{{placements.skills}}</p>
+          </p>
+          <p class="current-status" style="font-size: 1.0rem;">Status: {{placements.pl_status}}</p>
+          <a href="{{url_for('student.student')}}" class="btn btn-outline-primary profilebt"><i
+              class="btn-icon fa fa-long-arrow-right"></i>Go Back</a>
+
+          <button class="btn btn-outline-primary profilebt" id="generate-print2" onclick="printDiv()">Print
+            Page</button>
+        </div>
+      </article>
+    </div>
+  </div>
+</div>
+
+<script>
+  function printDiv() {
+    var printContents = document.querySelectorAll('.blog-card__info');
+    var originalContents = document.body.innerHTML;
+
+    document.body.innerHTML = '';
+    Array.from(printContents).forEach(function (div) {
+      document.body.appendChild(div.cloneNode(true));
+    });
+    window.print();
+    document.body.innerHTML = originalContents;
+  }
+
+</script>
+
+
+{% endif %}
+
+{% endif %}
+{% endblock %}

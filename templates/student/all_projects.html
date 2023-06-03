@@ -1,0 +1,194 @@
+{% extends "sidebar.html" %}
+
+
+{% block content %}
+
+
+{% if project_detail %}
+<div class="button-container">
+  <button type="button" class="btn" style="margin-bottom: 3%;" id="goBack">
+    <a href="{{url_for('student.all_projects')}}" class="txt3">
+      <i class='bx bx-arrow-back'></i>
+      Back to view all projects</a>
+  </button>
+</div>
+
+
+<div class="printable-area">
+  <div class="row single-project">
+    <div class="col-md-6 pro-image1">
+      <img class="no-print" alt="project image"
+        src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80">
+    </div>
+    <div class="col-md-6 pro-heading">
+      <h3>{{project_detail.project_title}}</h3>
+      <div class="pro-intro">
+        <p style="font-size: 18px;">{{project_detail.project_summary}}</p>
+        <p>
+          <strong>Project ID</strong>
+          <span class="pro-info__value">{{project_detail.project_id}}</span>
+        </p>
+        <p>
+          <strong>Start Date</strong>
+          <span class="pro-info__value">{{project_detail.start_date}}</span>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row single-project" style="margin-top: 10px;">
+    <div class="col-md-6 pro-heading">
+      <div class="pro-info">
+        <p>
+          <strong>Mentor</strong>
+          <span class="pro-info__value">{{project_detail.mentor_name}}</span>
+        </p>
+        <p>
+          <strong>Company</strong>
+          <span class="pro-info__value">{{project_detail.company_name}}</span>
+        </p>
+        <p>
+          <strong>Industry</strong>
+          <span class="pro-info__value">{{project_detail.industry}}</span>
+        </p>
+        <p>
+          <strong>Required Skills</strong>
+          <span class="pro-info__value">{{project_detail.skills}}</span>
+        </p>
+      </div>
+    </div>
+    <div class="col-md-6 pro-image1">
+      <img class="no-print" alt="project image"
+        src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1768&q=80">
+    </div>
+  </div>
+</div>
+<div style="display:flex;justify-content: center; margin-top: 5%;">
+  <button class="btn btn-outline-primary profilebt" onclick="printDiv()" style="width:200px;">Print this Page</button>
+
+</div>
+
+<script>
+  function printDiv() {
+    var printContents = document.querySelectorAll('.printable-area');
+    var originalContents = document.body.innerHTML;
+    document.body.innerHTML = '';
+    Array.from(printContents).forEach(function (div) {
+      document.body.appendChild(div.cloneNode(true));
+    });
+    window.print();
+    document.body.innerHTML = originalContents;
+  }
+
+</script>
+
+</div>
+
+</div>
+
+{% else %}
+<h4 class="scd-text" style="margin-bottom: 30px;">Company and Project List</h4>
+
+<form action="{{url_for('student.all_projects')}}" method="POST">
+  <div class="search-wrap">
+    <div class="search bar1">
+      <input type="text" class="searchTerm" id="location" name="location" placeholder="Project Location">
+      <input type="text" class="searchTerm" id="name" name="name" placeholder="Company Name">
+      <input type="text" class="searchTerm" id="industry" name="industry" placeholder="Industry">
+      <input type="text" class="searchTerm" id="skills" name="skills" placeholder="Skills">
+
+      <button type="submit" class="searchButton">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </div>
+</form>
+
+{% if projects_submitted %}
+<br>
+
+{% else %}
+
+<p style="margin-left: 50px;margin-top: 50px;font-style: italic;font-weight: 500;color:rgb(92, 92, 163)">
+  * Click <i class="bi bi-star"></i>/<i class="bi bi-star-fill"></i> to add/remove Projects
+</p>
+{% endif %}
+
+<div style="display:flex;flex-wrap: wrap;justify-content: space-between;padding: 0 50px;gap: 50px;">
+  {% for project in projects %}
+
+
+  <div class="p-card">
+    <div class="p-card-header">
+      <div class="content">
+        <h4 style="text-align: center;">{{project.project_title}} </h4>
+        <p style="margin-top: 10px;">
+          {{project.project_summary[0:150]}} .....
+        </p>
+      </div>
+    </div>
+
+    <div class="p-card-info">
+      <p><span class="fa fa-users" style="color:rgb(92, 92, 163)">Location: {{project.location}}</span> </p>
+      <p><span class="fa fa-users" style="color:rgb(92, 92, 163)">Start Date: {{project.start_date}}</span></p>
+    </div>
+
+    <div class="p-card-footer">
+      {% if projects_submitted %}
+
+      {% else %}
+      {% if project.project_id in selected_project %}
+      <a href="{{url_for('student.wishlist_update')}}?project_id={{project.project_id}}&remove=1"
+        btn-hover="Remove from wishlist"><i class="bi bi-star-fill"></i></a></span>
+      {% else %}
+      <a href="{{url_for('student.wishlist_update')}}?project_id={{project.project_id}}&add=1"
+        btn-hover="Add to wishlist" id="sweetalert{{project.project_id}}"><i class="bi bi-star"></i></a>
+      {% endif %}
+      {% endif %}
+
+      <script>
+        var btns = document.querySelectorAll("[id^='sweetalert']");
+
+        btns.forEach(function (btn) {
+          btn.onclick = function (event) {
+            event.preventDefault();
+
+            var targetUrl = btn.href;
+            var projectId = btn.id.replace("sweetalert", "");
+
+            xtalert.alertConfirm({
+              "confirmText": "Confirm",
+              "cancelText": "Cancel",
+              "msg": "Add ID: " + projectId + " into wishlist",
+              "confirmCallback": function () {
+                window.location.href = targetUrl;
+              },
+              "cancelCallback": function () {
+              }
+            });
+          };
+        });
+      </script>
+
+      <div>
+        <a href="{{url_for('student.all_projects')}}?detail=1&project_id={{project.project_id}}&add=1"><button
+            class="btn simon"
+            style="background-color: #F0F4F7;border:2px solid #4564ff;color:#4564ff;font-weight: 500;">Details <i
+              class="bi bi-arrow-right-short"></i></button></a></button>
+
+      </div>
+    </div>
+  </div>
+
+  {% endfor %}
+</div>
+
+<div style="margin-top: 100px;">
+  {{pagination.links}}
+</div>
+
+
+
+{% endif %}
+
+{% endblock %}

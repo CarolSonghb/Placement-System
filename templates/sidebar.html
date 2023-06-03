@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- pass title from routes -->
+  {% if title %}
+  <title> {{title}} - IPPS</title>
+  {%else%}
+  <title>IPPS</title>
+  {%endif%}
+
+  <!-- apply favicon  -->
+  <link rel="shortcut icon"
+    href="https://learn.lincoln.ac.nz/pluginfile.php/1/theme_lambda/favicon/1681274125/favicon.ico">
+  <!-- use css bootstrap templates -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <!-- use bootstrap icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+  <!-- Boxiocns CDN Link -->
+  <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+
+  <!-- multi select  -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/css/multi-select-tag.css">
+
+  <!-- render the css static file -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css')}}" />
+
+  <!-- simon add sweetalert -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/sweetalert.css')}}">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="../static/js/xtalert.js"></script>
+  <script src="../static/js/sweetalert.min.js"></script>
+
+
+  {% block head %} {% endblock %}
+</head>
+
+<body>
+  <div class="wrapper">
+    <!-- header -->
+    <header id="page-header" class="clearfix">
+      <div class="container-fluid">
+        <div class="row-fluid">
+
+          <div class="span6">
+            <div class="logo-header">
+              <a class="logo" href="{{url_for('login')}}" title="Home">
+                <img src="{{ url_for('static', filename='img/header_logo.png')}}" alt="Home" />
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </header>
+    <!-- navbar up here.-->
+
+    <div class="page-container">
+
+
+      <!-- Display flash message-->
+      {% for message in get_flashed_messages(with_categories=True) %}
+      {% if message[0] == 'red' %}
+      <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-bottom: 0px;">
+        {{ message[1] }}
+        {% else %}
+        <div class="alert alert-info alert-dismissible fade show" role="alert" style="margin-bottom: 0px;">
+          {{ message[1] }}
+          {% endif %}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+
+
+        {% if user_name%}
+        <!-- Sidebar -->
+        {% block sidebar %}
+
+        <div class="side-wrapper">
+
+          <div class="sidebar close">
+            <div class="logo-details">
+              <img src="{{ url_for('static', filename='img/header_logo.png')}}" alt="Bootstrap" width="32" height="32"
+                style="margin-left:25px; margin-right:10px;">
+              <span class="logo_name">IPPS G25</span>
+            </div>
+
+
+            {% if userrole == 'staff' %}
+            <ul class="nav-links">
+              <li>
+                <div class="profile-details" onclick="window.location.href='{{ url_for( 'logout' ) }}';">
+                  <div class=" profile-content">
+                  </div>
+                  <div class="name-job">
+                    <div class="profile_name">{{staff_info.first_name}} {{staff_info.last_name}}</div>
+                    <div class="job">Staff</div>
+                  </div>
+                  <i class=' bx bx-log-out'><a class="nav-link" href="{{url_for('logout')}}"></a></i>
+                </div>
+              </li>
+              <li>
+                <a href="{{url_for('staff.staff')}}">
+                  <i class='bx bx-grid-alt'></i>
+                  <span class="link_name">Dashboard</span>
+                </a>
+                <ul class="sub-menu blank">
+                  <li><a class="link_name" href="{{url_for('staff.staff')}}">Dashboard</a></li>
+                </ul>
+              </li>
+              <li>
+                <a href="{{url_for('staff.staff_profile')}}">
+                  <i class='bx bx-user'></i>
+                  <span class="link_name">My Profile</span>
+                </a>
+                <ul class="sub-menu blank">
+                  <li><a class="link_name" href="{{url_for('staff.staff_profile')}}">My Profile</a></li>
+                </ul>
+              </li>
+              <li>
+                <div class="iocn-link">
+                  <a href="{{url_for('staff.staff_student_list')}}">
+                    <i class="bi bi-card-checklist"></i>
+                    <span class="link_name">Student List</span>
+                  </a>
+                  <i class='bx bxs-chevron-down arrow'></i>
+                </div>
+                <ul class="sub-menu">
+                  <li><a class="link_name" href="{{url_for('staff.staff_student_list')}}">View Students List</a></li>
+                </ul>
+              </li>
+              <li>
+                <a href="{{url_for('staff.comp_projects')}}">
+                  <i class="bi bi-window-stack"></i>
+                  <span class="link_name">Projects </span>
+                </a>
+                <ul class="sub-menu blank">
+                  <li><a class="link_name" href="{{url_for('staff.comp_projects')}}">Companies and Projects</a></li>
+                </ul>
+              </li>
+              <li>
+                <a href="{{url_for('staff.all_mentors')}}">
+                  <i class="bi bi-people"></i>
+                  <span class="link_name">Mentors</span>
+                </a>
+                <ul class="sub-menu blank">
+                  <li><a class="link_name" href="{{url_for('staff.all_mentors')}}">View Mentors List</a></li>
+                </ul>
+              </li>
+              <li>
+                <a href="{{url_for('staff.staff_add_mentor')}}">
+                  <i class="bi bi-person-plus"></i>
+                  <span class="link_name">Add Mentor</span>
+                </a>
+                <ul class="sub-menu blank">
+                  <li><a class="link_name" href="{{url_for('staff.staff_add_mentor')}}">Add Mentor</a></li>
+                </ul>
+              </li>
+              <li>
+                <a href="{{url_for('staff.staff_placement_info')}}">
+                  <i class="bi bi-card-heading"></i>
+                  <span class="link_name">Placement Report</span>
+                </a>
+                <ul class="sub-menu blank">
+                  <li><a class="link_name" href=" ">Placement Report</a></li>
+                </ul>
+              </li>
+              <li>
+                <a href="{{url_for('change_password')}}">
+                  <i class='bx bx-cog'></i>
+                  <span class="link_name">Change Password</span>
+                </a>
+                <ul class="sub-menu blank">
+                  <li><a class="link_name" href="{{url_for('change_password')}}">Change Password</a></li>
+                </ul>
+              </li>
+            </ul>
+
+
+            {% elif userrole == 'student' %}
+
+
+
+            <ul class="nav-links">
+              <li>
+                <div class="profile-details" onclick="window.location.href='{{ url_for( 'logout' ) }}';">
+                  <div class=" profile-content">
+                  </div>
+                  <div class="name-job">
+                    <div class="profile_name">{{student_info.first_name}} {{student_info.last_name}}</div>
+                    <div class="job">Student</div>
+                  </div>
+                  <i class='bx bx-log-out'></i>
+                </div>
+              </li>
+              <li>
+                <a href="{{url_for('student.student')}}">
+                  <i class='bx bx-grid-alt'></i>
+                  <span class="link_name">Dashboard</span>
+                </a>
+                <ul class="sub-menu blank">
+                  <li><a class="link_name" href="{{url_for('student.student')}}">Dashboard</a></li>
+                </ul>
+              </li>
+              <li>
+                <a href="{{url_for('student.student_profile')}}">
+                  <i class='bx bx-user'></i>
+                  <span class="link_name">My Profile</span>
+                </a>
+                <ul class="sub-menu blank">
+                  <li><a class="link_name" href="{{url_for('student.student_profile')}}">My Profile</a></li>
+                </ul>
+              </li>
+              <li>
+                <a href="{{url_for('student.all_projects')}}">
+                  <i class="bi bi-card-text"></i>
+                  <span class="link_name">All Projects</span>
+                </a>
+                <ul class="sub-menu blank">
+                  <li><a class="link_name" href="{{url_for('student.all_projects')}}">All Projects</a></li>
+                </ul>
+              </li>
+              <li>
+                <a href="{{url_for('student.add_project')}}">
+                  <i class="bi bi-clipboard-plus"></i>
+                  <span class="link_name">Add Project</span>
+                </a>
+                <ul class="sub-menu blank">
+                  <li><a class="link_name" href="{{url_for('student.add_project')}}">Add My Own Project</a></li>
+                </ul>
+              </li>
+              <li>
+                <a href="{{url_for('student.placement')}}">
+                  <i class="bi bi-file-bar-graph"></i>
+                  <span class="link_name">My Placement</span>
+                </a>
+                <ul class="sub-menu blank">
+                  <li><a class="link_name" href="{{url_for('student.placement')}}">My Placement</a></li>
+                </ul>
+              </li>
+              <li>
+                <a href="{{url_for('student.wishlist')}}">
+                  <i class="bi bi-card-checklist"></i>
+                  <span class="link_name">Wishlist</span>
+                </a>
+                <ul class="sub-menu blank">
+                  <li><a class="link_name" href="{{url_for('student.wishlist')}}">My Wishlist</a></li>
+                </ul>
+              </li>
+
+              <li>
+                <a href="{{url_for('change_password')}}">
+                  <i class="bi bi-person-gear"></i>
+                  <span class="link_name">Change Password</span>
+                </a>
+                <ul class="sub-menu blank">
+                  <li><a class="link_name" href="{{url_for('change_password')}}">Change Password</a></li>
+                </ul>
+              </li>
+            </ul>
+
+
+            {% elif userrole == 'mentor' %}
+
+
+            <ul class="nav-links">
+              <li>
+                <div class="profile-details" onclick="window.location.href='/logout';">
+                  <div class=" profile-content">
+                  </div>
+                  <div class="name-job">
+                    <div class="profile_name">{{mentor_info.first_name}} {{mentor_info.last_name}}</div>
+                    <div class="job">Mentor</div>
+                  </div>
+                  <i class='bx bx-log-out'></i>
+                </div>
+              </li>
+              <li>
+                <a href="{{url_for('mentor.mentor')}}">
+                  <i class='bx bx-grid-alt'></i>
+                  <span class="link_name">Dashboard</span>
+                </a>
+                <ul class="sub-menu blank">
+                  <li><a class="link_name" href="{{url_for('mentor.mentor')}}">Dashboard</a></li>
+                </ul>
+              </li>
+              <li>
+                <a href="{{url_for('mentor.mentor_profile')}}">
+                  <i class='bx bx-user'></i>
+                  <span class="link_name">My Profile</span>
+                </a>
+                <ul class="sub-menu blank">
+                  <li><a class="link_name" href="{{url_for('mentor.mentor_profile')}}">My Profile</a></li>
+                </ul>
+              </li>
+              <li>
+                <a href="{{url_for('mentor.projects')}}">
+                  <i class="bi bi-card-list"></i>
+                  <span class="link_name">Project Info</span>
+                </a>
+                <ul class="sub-menu blank">
+                  <li><a class="link_name" href="{{url_for('mentor.projects')}}">Project Info</a></li>
+                </ul>
+              </li>
+              <li>
+                <div class="iocn-link">
+                  <a href="{{url_for('mentor.students_interested')}}">
+                    <i class="bi bi-people"></i>
+                    <span class="link_name">View Students</span>
+                  </a>
+                </div>
+                <ul class="sub-menu blank">
+                  <li><a class="link_name" href="{{url_for('mentor.students_interested')}}">Students Wishlisted My
+                      Projects </a></li>
+                </ul>
+              </li>
+              <li>
+                <a href="{{url_for('mentor.matched_students')}}">
+                  <i class="bi bi-person-check"></i>
+                  <span class="link_name">Selected Students</span>
+                </a>
+                <ul class="sub-menu blank">
+                  <li><a class="link_name" href="{{url_for('mentor.matched_students')}}">Selected Students</a></li>
+                </ul>
+              </li>
+              <li>
+                <a href="{{url_for('mentor.placement')}}">
+                  <i class="bi bi-journal-text"></i>
+                  <span class="link_name">Placement Update</span>
+                </a>
+                <ul class="sub-menu blank">
+                  <li><a class="link_name" href="{{url_for('mentor.placement')}}">Update Placement Information</a></li>
+                </ul>
+              </li>
+              <li>
+                <a href="{{url_for('mentor.add_project')}}">
+                  <i class="bi bi-clipboard-plus"></i>
+                  <span class="link_name">Add Project</span>
+                </a>
+                <ul class="sub-menu blank">
+                  <li><a class="link_name" href="{{url_for('mentor.add_project')}}">Add Project</a></li>
+                </ul>
+              </li>
+              <li>
+                <a href="{{url_for('mentor.contact')}}">
+                  <i class="bi bi-envelope"></i>
+                  <span class="link_name">Contact Staff</span>
+                </a>
+                <ul class="sub-menu blank">
+                  <li><a class="link_name" href="{{url_for('mentor.contact')}}">Contact Staff</a></li>
+                </ul>
+              </li>
+
+              <li>
+                <a href="{{url_for('change_password')}}">
+                  <i class='bx bx-cog'></i>
+                  <span class="link_name">Change Password</span>
+                </a>
+                <ul class="sub-menu blank">
+                  <li><a class="link_name" href="{{url_for('change_password')}}">Change Password</a></li>
+                </ul>
+              </li>
+
+              <li>
+                <div class="iocn-link">
+                  <a href="#">
+                    <i class='bx bx-book-alt'></i>
+                    <span class="link_name">TBC</span>
+                  </a>
+                  <i class='bx bxs-chevron-down arrow'></i>
+                </div>
+                <ul class="sub-menu">
+                  <li><a class="link_name" href="#">TBC</a></li>
+                  <li><a href="#">Web Design</a></li>
+                  <li><a href="#">Login Form</a></li>
+                  <li><a href="#">Card Design</a></li>
+                </ul>
+              </li>
+            </ul>
+
+
+            {% endif %}
+
+
+            <!--sidebar end-->
+
+          </div>
+
+          <section class="home-section">
+
+
+            <div class="home-content">
+              <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+                <div style="width:50%;">
+                  <i class='bx bx-menu'></i>
+                  <span class="text">Industry Project Placement System</span>
+                </div>
+                <div class="logoutmain">
+                  <img src="{{g.Avatar_link}}" alt="" width='30' height="30" style="border-radius: 50%;">
+
+                  {% if userrole == 'staff' %}
+                  <span class="greeting mx-3" style="color:rgb(71, 71, 210)">Hi, {{staff_info.first_name}}
+                    {{staff_info.last_name}}</span>
+                  {% elif userrole == 'student' %}
+                  <span class="greeting mx-3" style="color:rgb(71, 71, 210)">Hi, {{student_info.first_name}}
+                    {{student_info.last_name}}</span>
+                  {% elif userrole == 'mentor' %}
+                  <span class="greeting mx-3" style="color:rgb(71, 71, 210)">Hi, {{mentor_info.first_name}}
+                    {{mentor_info.last_name}}</span>
+                  {% endif %}
+                  <div style="margin-left: 10px;display:inline;">
+                    <a href="{{url_for('logout')}}">
+                      <i class='bx bx-log-out'></i>
+                      Log Out
+                    </a>
+                  </div>
+                </div>
+
+              </nav>
+
+            </div>
+
+            <!-- Content render from templates -->
+            <div id="breadcrumb-container"></div>
+            <div id="root"> {% block content %} {% endblock %}</div>
+          </section>
+        </div>
+
+        {% endblock %}
+
+
+        {%endif%}
+
+
+
+
+
+        <footer id="footer">
+          {% block footer %}
+          <p>Lincoln Industry Project Placement Management System</p>
+          Copyright © <span id="currentYear">2023</span>
+          by LU-MAC-Group 25
+          {% endblock%}
+
+        </footer>
+
+      </div>
+
+    </div>
+    <!-- Footer -->
+
+
+    <!-- render the js static file -->
+    <script src="/static/js/index.js"></script>
+    <script src="/static/js/sweetalert.min.js"></script>
+    <script src="/static/js/xtalert.js"></script>
+    <!-- ajax library -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <!-- Jquery library cdn -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+      integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <!--  Bootstrap JavaScript plugin -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"></script>
+    <!-- multi selection -->
+    <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/js/multi-select-tag.js"></script>
+    <!-- breadcrumbs -->
+    <script>
+      function generateBreadcrumbs() {
+        const breadcrumbContainer = document.getElementById('breadcrumb-container');
+        const breadcrumbTrail = document.createElement('nav');
+        breadcrumbTrail.setAttribute('aria-label', 'Breadcrumb');
+        breadcrumbTrail.classList.add('breadcrumb');
+
+        const breadcrumbList = document.createElement('ol');
+
+        const currentUrl = window.location.href;
+
+        const baseUrl = window.location.protocol + '//' + window.location.host;
+
+        let breadcrumbUrl = baseUrl;
+        const urlSegments = currentUrl.replace(baseUrl, '').split('/').filter(segment => segment !== '');
+
+        urlSegments.forEach((segment, index) => {
+          breadcrumbUrl += `/${segment}`;
+
+          const breadcrumbItem = document.createElement('li');
+          const breadcrumbLink = document.createElement('a');
+
+          if (index === urlSegments.length - 1) {
+            breadcrumbLink.setAttribute('aria-current', 'page');
+            breadcrumbLink.style.pointerEvents = 'none'; // Disable pointer events
+          } else {
+            breadcrumbLink.setAttribute('href', breadcrumbUrl);
+          }
+
+          const replacements = {
+            'profile': 'My Profile',
+            'projects': 'View Projects',
+            'placement': 'Placement Update',
+            'matched_students': 'Matched Students',
+            'contact': 'Contact Staff',
+            'student_list': 'Student List',
+            'students_need_project': 'Student List',
+            'students_matched': 'Student List',
+            'mentors': 'View Mentors',
+            'add_mentor': 'Add Mentor',
+            'placement_info': 'Placement Reports',
+            'wishlist': 'My Wishlist',
+            'add_project': 'Add Project',
+            'all_projects': 'View Projects',
+            'placement': 'Update Placement',
+            'students_interested': 'Students Interested'
+          };
+
+          if (replacements.hasOwnProperty(segment)) {
+            breadcrumbLink.textContent = replacements[segment];
+            breadcrumbContainer.style.display = 'block';
+          } else if (
+            segment === 'mentor' ||
+            segment === 'staff' ||
+            segment === 'student' ||
+            segment === 'change_password' ||
+            segment.startsWith('match?project_id=') ||
+            segment.startsWith('all_projects?') ||
+            segment.startsWith('staff_match_student?')
+          ) {
+            breadcrumbContainer.style.display = 'none';
+            breadcrumbLink.textContent = 'Home';
+          } else {
+            breadcrumbLink.textContent = segment;
+            breadcrumbContainer.style.display = 'block';
+          }
+
+          breadcrumbItem.appendChild(breadcrumbLink);
+          breadcrumbList.appendChild(breadcrumbItem);
+        });
+
+        breadcrumbTrail.appendChild(breadcrumbList);
+        breadcrumbContainer.appendChild(breadcrumbTrail);
+      }
+
+      // Call the function to generate breadcrumbs
+      generateBreadcrumbs();
+
+
+
+    </script>
+</body>
+
+</html>

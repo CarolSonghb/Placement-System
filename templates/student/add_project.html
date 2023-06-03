@@ -1,0 +1,147 @@
+{% extends "sidebar.html" %}
+
+
+{% block content %}
+
+
+
+
+<div class="add-container" >
+  <header style="text-align: center;margin-bottom: 50px;">Add Your Own Project</header>
+  <form action="{{url_for('student.add_project')}}" method="POST" style="min-height: 800px;">
+    <div class="add-form first">
+      <div class="add-details personal">
+        <span class="title">
+          Mentor Details
+          <a style="color: grey; margin-left: 2%; font-style: italic;">Tell us details about your mentor</a>
+        </span>
+        <div class="fields">
+          <div class="input-field">
+            <label>First Name</label>
+            <input type="text" id="first_name" name="first_name" placeholder="Enter first name" required>
+          </div>
+          <div class="input-field">
+            <label>Last Name</label>
+            <input type="text" id="last_name" name="last_name" placeholder="Enter last name" required>
+          </div>
+          <div class="input-field">
+            <label>Email Address</label>
+            <input type="email" id="email" name="email" placeholder="Enter email address" required>
+          </div>
+          <div class="input-field">
+            <label>Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="Enter phone number" pattern="[0-9]*" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="details ID">
+        <span class="title">
+          Project Details
+          <a style="color: grey; margin-left: 2%; font-style: italic;">Tell us details about this project</a>
+        </span>
+        
+        <div class="fields">
+          <div class="input-field">
+            <label>Company Name</label>
+            <input type="text" id="company_name" name="company_name" placeholder="Company name" required oninput="searchCompanies(this.value)">
+          
+            <div class="dropdown">
+              <ul id="companyList" class="dropdown-menu"></ul>
+            </div>
+          </div>
+
+          <div class="input-field">
+            <label>Industry</label>
+            <input type="text" id="industry" name="industry" placeholder="Company industry" required>
+          </div>
+          <div class="input-field">
+            <label>Location</label>
+            <select class="prolocation" id="location" name="location" required>
+              <option value="" disabled selected>Select project location</option>
+              <option value="Auckland">Auckland</option>
+              <option value="Wellington">Wellington</option>
+              <option value="Hamilton">Hamilton</option>
+              <option value="Christchurch">Christchurch</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="input-field">
+            <label>Project Title</label>
+            <input type="text" id="project_title" name="project_title" placeholder="Project title" required>
+          </div>
+          <div class="input-field">
+            <label>Project Start Date</label>
+            <input type="date" name="start_date" placeholder="Enter start date" required>
+          </div>
+          <div class="input-field">
+            <label>Placement No.</label>
+            <input type="text" name="place_num" placeholder="Enter placement Number" required>
+          </div>
+          <div class="input-field">
+            <label for="skills">Skills Required</label>
+            <select name="skills" id="location" multiple required>
+              <option disabled selected>Select skills required</option>
+              {% for skill in all_skills %}
+              <option value={{skill.skill_id}}>{{skill.skill_id}} {{skill.details}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="input-field" style="width:60%;">
+            <label>Project Summary</label>
+            <textarea type="text" id="project_summary" name="project_summary" placeholder="Project summary"
+              style="height:180px; width: 100%; margin: 8px 0;" required>
+            </textarea>
+          </div>
+        </div>
+
+    </div>
+    
+    <div class="form-button-wrapper form-button-wrapper--align-center">
+      <input class="btn btn-primary profilebt" style="width:150px;margin-top: 20px; margin-right: 3%;" type="reset" value="Reset">
+      <input class="btn btn-outline-primary profilebt" style="width:150px;margin-top: 20px;" type="submit" value="Submit">
+    </div>
+
+  </form>
+</div>
+
+
+<script>
+  // show matching companies when adding profile
+  function searchCompanies(searchText) {
+      if (searchText.length > 0) {
+        $.ajax({
+          url: '{{url_for("staff.search_company")}}',
+          data: { search: searchText },
+          success: function(response) {
+            var matchingCompanies = response.companies;
+            var companyList = document.getElementById('companyList');
+            companyList.innerHTML = '';
+  
+            matchingCompanies.forEach(function(company) {
+              var option = document.createElement('li');
+              option.textContent = company;
+              option.classList.add('company-option');
+              option.onclick = function() {
+                document.getElementById('company_name').value = company;
+                companyList.innerHTML = '';
+              };
+              companyList.appendChild(option);
+            });
+  
+            //show list
+            companyList.style.display = 'block';
+          },
+          error: function(xhr, status, error) {
+            console.error('Request failed. Status:', status);
+          }
+        });
+      } else {
+        // hide list
+        document.getElementById('companyList').style.display = 'none';
+      }
+    }
+  </script>
+  
+
+{% endblock %}

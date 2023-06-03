@@ -1,0 +1,271 @@
+{% extends "sidebar.html" %}
+
+{% block content %}
+
+
+{% if project_details_list %}
+
+<div>
+  <button type="button" class="btn" id="goBack">
+    <a href="{{url_for('staff.staff_student_list')}}" class="txt3" style="font-size: 20px;">
+      <i class='bx bx-arrow-back'></i>
+      Back</a>
+  </button>
+</div>
+
+<div class="container-fluid">
+  <!-- Card stats -->
+  <div class="row g-6 mb-6" style="display:flex;justify-content: center;margin-bottom:50px;">
+    <div class="col-xl-3 col-sm-6 col-12">
+      <div class="card shadow border-0" style="border-radius: 10px;padding:20px;">
+        <div class="row">
+          <div class="col" style="text-align: center;">
+            <div style="margin-bottom: 15px;">
+              <span class="h6 font-semibold text-muted text-sm d-block mb-2">Student ID:</span>
+              <span class="h5 font-bold mb-0">{{student_id}}</span>
+            </div>
+            <div style="margin-bottom: 15px;">
+              <span class="h6 font-semibold text-muted text-sm d-block mb-2">Student Name</span>
+              <span class="h5 font-bold mb-0">{{student_name}}</span>
+            </div>
+            <div>
+              <span class="h6 font-semibold text-muted text-sm d-block mb-2">Location</span>
+              <span class="h5 font-bold mb-0">{{location.location}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% set matched_projects = [] %}
+{% set other_projects = [] %}
+
+
+{% for key, value in skill_match_count.items() %}
+
+{% for slot in available_slot %}
+
+  {% if key == slot.project_id %}
+    {% set project_found = false %}
+
+    {% for project in project_details_list %}
+      {% if key == project.project_id %}
+
+        {% if location.location == project.location or project.location == 'Online' %}
+          {% set project_found = true %}
+          {% set _ = matched_projects.append({'project': project, 'slot': slot}) %}
+        {% else %}
+          {% set _ = other_projects.append({'project': project, 'slot': slot}) %}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+{% endfor %}
+{% endfor %}
+
+<h1 class="best-match-heading">Best Match</h1>
+
+{% for project in matched_projects %} 
+  {% set project_info = project['project'] %}
+  {% set slot_info = project['slot'] %}
+
+  <div class="scd-container matched-container">
+    <div class="scd-grid">
+      <div class="scd-card-content">
+        <h6 class="pro-cat">Project ID: {{ project_info.project_id }}</h6>
+        <h2 class="pro-name">Matched Skills: {{ skill_match_count[project_info.project_id]['matched_skills'] }}</h2>
+        <h2 class="pro-name">Available placements: {{ slot_info.Available_count }}</h2>
+        <h6 class="pro-cat">Mentor ID: {{ project_info.mentor_id }}</h6>
+        <h2 class="pro-name">{{ project_info.project_title }}</h2>
+        <p class="pro-des">Company Name: {{ project_info.company_name }}</p>
+        <p class="pro-des">Industry: {{ project_info.industry }}</p>
+        <p class="pro-des" style="color: rgb(143, 51, 192); font-weight: bold;">Location: {{ project_info.location }}</p>
+        <p class="pro-des">Details: {{ project_info.project_summary }}</p>
+        <form action="{{ url_for('staff.staff_match_student') }}" method="POST" class="match-form">
+          <input type="hidden" value="{{ student_id }}" name="student_id">
+          <input type="hidden" value="{{ project_info.project_id }}" name="project_id">
+          <button type="submit" class="btn btn-outline-primary profilebt staff-submit-btn" style="width: 100%;" 
+          data-project-id="{{ project_info.project_id }}">Match Project</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+{% endfor %}
+
+
+<h1 class="best-match-heading">Other options</h1>
+
+
+
+{% for project in other_projects %} 
+  {% set project_info = project['project'] %}
+  {% set slot_info = project['slot'] %}
+
+  <div class="scd-container matched-container">
+    <div class="scd-grid">
+      <div class="scd-card-content">
+        <h6 class="pro-cat">Project ID: {{ project_info.project_id }}</h6>
+        <h2 class="pro-name">Matched Skills: {{ skill_match_count[project_info.project_id]['matched_skills'] }}</h2>
+        <h2 class="pro-name">Available placements: {{ slot_info.Available_count }}</h2>
+        <h6 class="pro-cat">Mentor ID: {{ project_info.mentor_id }}</h6>
+        <h2 class="pro-name">{{ project_info.project_title }}</h2>
+        <p class="pro-des">Company Name: {{ project_info.company_name }}</p>
+        <p class="pro-des">Industry: {{ project_info.industry }}</p>
+        <p class="pro-des">Location: {{ project_info.location }}</p>
+        <p class="pro-des">Details: {{ project_info.project_summary }}</p>
+        <form action="{{ url_for('staff.staff_match_student') }}" method="POST" class="match-form">
+          <input type="hidden" value="{{ student_id }}" name="student_id">
+          <input type="hidden" value="{{ project_info.project_id }}" name="project_id">
+          <button type="submit" class="btn btn-outline-primary profilebt staff-submit-btn" style="width: 100%;" 
+          data-project-id="{{ project_info.project_id }}">Match Project</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+{% endfor %}
+
+<script>
+  var btns = document.querySelectorAll('.staff-submit-btn');
+
+  btns.forEach(function (btn) {
+    btn.addEventListener('click', function (event) {
+      event.preventDefault();
+      var form = this.closest('.match-form');
+
+      xtalert.alertConfirm({
+        "confirmText": "Confirm",
+        "cancelText": "Cancel",
+        "msg": "Do you want to Match this Project?",
+        "confirmCallback": function () {
+          form.submit();
+        },
+        "cancelCallback": function () {
+          //leave for now, no need
+        }
+      });
+    });
+  });
+</script> 
+
+
+
+
+
+{% else %}
+
+
+<div id="breadcrumb-container" class="breadcrumb-container">
+  <nav class="breadcrumb" aria-label="breadcrumb">
+    <ol>
+      <li><a href="/staff">Home</a></li>
+      <li><a href="/staff/projects">View Projects</a></li>
+      <li class="active" aria-current="page">Match Students</li>
+    </ol>
+  </nav>
+</div>
+
+<h3 class="scd-text" style="margin-bottom: 50px;"> Project: <span style="color:rgb(46, 46, 155)">{{skills_required.project_title}} - {{skills_required.project_id}}</span></h3>
+
+
+<div class="wlist-container">
+  <div class="wlist">
+
+    <div class="wlist-preview">
+      <h3><small>Industry:</small> {{skills_required.industry}}</h3>
+
+      <h1>{{skills_required.project_title}} </h1>
+      <h3>{{skills_required.first_name}} {{skills_required.last_name}} </h3>
+    </div>
+    <div class="wlist-info">
+      <h3>Company: {{skills_required.company_name}} </h3>
+      <h3>Available slots: </h3>
+      <h1>Skills Required by the Project: {{skills_required.skills}}</h1>
+      <div class="status">
+        <p class="current-status">Industry: {{skills_required.industry}}</p>
+        <p class="current-status">Location: {{location}}</p>
+      </div>
+    </div>
+  </div>
+  
+
+  <div class="container-fluid">
+    <div class="row g-6 mb-6" style="display:flex;justify-content: center;margin-bottom:50px;">
+      <div class="col-xl-3 col-sm-6 col-12">
+        <div class="card shadow border-0">
+          <div class="card-body">
+            <div class="row">
+              <div class="col" style="text-align: center;">
+                <span class="h6 font-semibold text-muted text-sm d-block mb-2">Project ID</span>
+                <span class="h3 font-bold mb-0">{{skills_required.project_id}}</span>
+              </div>
+  
+              <div class="col" style="text-align: center;">
+                <span class="h6 font-semibold text-muted text-sm d-block mb-2"><i class="bi bi-people"></i>&nbsp;
+                  Confirmed</span>
+                <span class="h3 font-bold mb-0" > {{confirmed_num.student_count}}</span>
+              </div>
+            </div>
+
+            <div class="mt-2 mb-0 text">
+              <span class="text-nowrap text-xs text-muted">Available Slots</span>
+              <span class="badge badge-pill bg-soft-success text-success me-2">
+                {{confirmed_num.place_num - confirmed_num.student_count}}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  
+    
+  {% for student in student_list %}
+
+  <div class="scd-container">
+    <div class="scd-grid">
+      <div class="scd-card-content">
+        <h6 class="pro-cat">Student ID: {{student.student_id}}</h6>
+        <h2 class="pro-name" style="text-align: center;">{{student.first_name}} {{student.last_name}}</h2>
+        <p class="pro-des">Email: {{student.email}}</p>
+        <p class="pro-des">Phone: {{student.phone}}</p>
+
+
+        <p class="pro-des">Skills: &nbsp;
+                 
+          {% for skill in student.student_skills.split(',') %}
+          <span> {{ skill.strip() }} </span> {% if not loop.last %}, &nbsp;{% endif %}
+          {% endfor %}
+        </p>
+
+        <div class="status" style="margin-top: 50px;">
+          <p class="current-status">Location: {{student.location}}</p>
+          <p class="current-status">Number of skills matched: {{student.skills_matched}}</p>
+        </div>
+
+        <form action="{{url_for('staff.match_students_project')}}" method="POST">
+          <input type="hidden" name="student_id" value="{{student.student_id}}">
+          <input type="hidden" name="project_id" value="{{project_id}}">
+          {% if available_slots > 0 %}
+          <div style="position:absolute;bottom:20px;width:300px;">
+            <button class="btn btn-outline-primary profilebt" style="width:100%;" type="submit">Match this student</button>
+          </div>
+          {% endif %}
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+  {% endfor %}
+
+  {% endif %}
+
+
+  {% endblock %}

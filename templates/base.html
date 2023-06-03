@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- pass title from routes -->
+  {% if title %}
+  <title> {{title}} - IPPS</title>
+  {%else%}
+  <title>IPPS</title>
+  {%endif%}
+
+  <!-- apply favicon  -->
+  <link rel="shortcut icon"
+    href="https://learn.lincoln.ac.nz/pluginfile.php/1/theme_lambda/favicon/1681274125/favicon.ico">
+  <!-- use css bootstrap templates -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <!-- use bootstrap icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+  <!-- Boxiocns CDN Link -->
+  <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+
+  <!-- multi select  -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/css/multi-select-tag.css">
+
+  <!-- render the css static file -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css')}}" />
+
+  <!-- simon add sweetalert -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/sweetalert.css')}}">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="../static/js/xtalert.js"></script>
+  <script src="../static/js/sweetalert.min.js"></script>
+  <script src="assets/bootstrap-paginator/bootstrap-paginator.min.js"></script>
+
+  {% block head %} {% endblock %}
+</head>
+
+<body>
+  <div class="wrapper">
+
+    <!-- header -->
+    <header id="page-header" class="clearfix">
+      <div class="container-fluid">
+        <div class="row-fluid">
+
+          <div class="span6">
+            <div class="logo-header">
+              <a class="logo" href="{{url_for('login')}}" title="Home">
+                <img src="{{ url_for('static', filename='img/header_logo.png')}}" alt="Home" />
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </header>
+    <!-- navbar up here.-->
+
+    <div class="page-container">
+
+
+      <!-- Display flash message-->
+      {% for message in get_flashed_messages(with_categories=True) %}
+        {% if message[0] == 'red' %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-bottom: 0px;">
+          {{ message[1] }}
+        {% else %}
+        <div class="alert alert-info alert-dismissible fade show" role="alert" style="margin-bottom: 0px;">
+          {{ message[1] }}
+      {% endif %}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+
+      <!-- Content render from templates -->
+      <div id="root"> {% block content %} {% endblock %}</div>
+
+      <footer id="footer">
+        {% block footer %}
+        <p>Lincoln Industry Project Placement Management System</p>
+        Copyright © <span id="currentYear">2023</span>
+        by LU-MAC-Group 25
+        {% endblock%}
+
+      </footer>
+
+    </div>
+
+  </div>
+  <!-- Footer -->
+
+
+
+    <!-- render the js static file -->
+    <script src="/static/js/index.js"></script>
+    <script src="/static/js/sweetalert.min.js"></script>
+    <script src="/static/js/xtalert.js"></script>
+    <!-- ajax library -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <!-- Jquery library cdn -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+      integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <!--  Bootstrap JavaScript plugin -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"></script>
+    <!-- multi selection -->
+    <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/js/multi-select-tag.js"></script>
+    <!-- breadcrumbs -->
+
+</body>
+
+</html>

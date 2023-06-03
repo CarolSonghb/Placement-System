@@ -1,0 +1,129 @@
+{% extends "sidebar.html" %}
+
+
+
+{% block content %}
+
+{% if add_mentor %}
+
+
+
+<div class="add-container">
+  <header style="text-align: center; font-size: 26px;">Add Mentor</header>
+  <p class="sm-quote" style="font-style: italic; margin-bottom: 5%;">Create profile for a new mentor</p>
+  <form action="{{url_for('staff.staff_add_mentor')}}" method="POST" onsubmit="updateActionURL()"
+    style="min-height: 35rem;">
+    <div class="add-form first">
+      <div class="add-details personal">
+        <span class="title">Mentor Details</span>
+        <div class="fields">
+          <div class="input-field">
+            <label>Username</label>
+            <input type="text" id="user_name" name="user_name" placeholder="Enter username" required>
+          </div>
+          <div class="input-field">
+            <label>First Name</label>
+            <input type="text" id="first_name" name="first_name" placeholder="Enter first name" required>
+          </div>
+          <div class="input-field">
+            <label>Last Name</label>
+            <input type="text" id="last_name" name="last_name" placeholder="Enter last name" required>
+          </div>
+          <div class="input-field">
+            <label>Email</label>
+            <input type="email" id="email" name="email" placeholder="Enter email address" required>
+          </div>
+          <div class="input-field">
+            <label>Phone</label>
+            <input type="tel" id="phone" name="phone" placeholder="Enter phone number" pattern="[0-9]*" required>
+          </div>
+        </div>
+      </div>
+      <div class="details ID mt-5">
+        <span class="title">Company Details</span>
+        <div class="fields">
+          <div class="input-field">
+            <label>Company Name</label>
+            <input type="text" id="company_name" name="company_name" placeholder="Company name" required
+              oninput="searchCompanies(this.value)">
+
+            <div class="dropdown">
+              <ul id="companyList" class="dropdown-menu"></ul>
+            </div>
+
+          </div>
+          <div class="input-field">
+            <label>Industry</label>
+            <input type="text" id="industry" name="industry" placeholder="Company industry" required>
+          </div>
+          <div class="input-field">
+            <label>Location</label>
+            <select class="prolocation" id="location" name="location" required>
+              <option value="" disabled selected>Select project location</option>
+              <option value="Auckland">Auckland</option>
+              <option value="Wellington">Wellington</option>
+              <option value="Hamilton">Hamilton</option>
+              <option value="Christchurch">Christchurch</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div style="margin: 5% auto auto auto;">
+            <input style="width:150px; margin-right: 30px;" class="btn btn-primary profilebt" type="reset"
+              value="Reset">
+            <input class="btn btn-outline-primary profilebt" style="width:150px;" type="submit" value="Submit">
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+
+<script>
+  // show matching companies when adding profile
+  function searchCompanies(searchText) {
+    if (searchText.length > 0) {
+      $.ajax({
+        url: '{{url_for("staff.search_company")}}',
+        data: { search: searchText },
+        success: function (response) {
+          var matchingCompanies = response.companies;
+          var companyList = document.getElementById('companyList');
+          companyList.innerHTML = '';
+
+          matchingCompanies.forEach(function (company) {
+            var option = document.createElement('li');
+            option.textContent = company;
+            option.classList.add('company-option');
+            option.onclick = function () {
+              document.getElementById('company_name').value = company;
+              companyList.innerHTML = '';
+            };
+            companyList.appendChild(option);
+          });
+
+          //show list
+          companyList.style.display = 'block';
+        },
+        error: function (xhr, status, error) {
+          console.error('Request failed. Status:', status);
+        }
+      });
+    } else {
+      // hide list
+      document.getElementById('companyList').style.display = 'none';
+    }
+  }
+</script>
+
+
+
+{%elif add_project %}
+<h1>Add Project</h1>
+
+{%endif%}
+
+{% endblock %}

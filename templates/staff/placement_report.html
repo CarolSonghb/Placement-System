@@ -1,0 +1,130 @@
+{% extends "sidebar.html" %}
+
+
+
+{% block content %}
+
+
+<!-- <h3 class="scd-text"> Placement Report</h3> -->
+
+
+
+
+<!-- Main -->
+
+<div class="container-fluid">
+  <!-- Card stats -->
+  <div class="row g-6 mb-6">
+    <div class="col-xl-3 col-sm-6 col-12">
+      <div class="card shadow border-0">
+        <div class="card-body">
+          <div class="row">
+            <div class="col">
+              <span class="h6 font-semibold text-muted text-sm d-block mb-2">Students Need Placed </span>
+              <span class="h3 font-bold mb-0">{{placement_report.students_needing_project_in_semester_2}}</span>
+            </div>
+            <div class="col-auto">
+
+              <i class="bi bi-people"></i>
+
+            </div>
+          </div>
+          <div class="mt-2 mb-0 text-sm">
+            <span class="badge badge-pill bg-soft-success text-success me-2">
+              {{placement_report.total_students}}
+            </span>
+            <span class="text-nowrap text-xs text-muted">Total Students </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-sm-6 col-12">
+      <div class="card shadow border-0">
+        <div class="card-body">
+          <div class="row">
+            <div class="col">
+              <span class="h6 font-semibold text-muted text-sm d-block mb-2">Student Matched</span>
+              <span class="h3 font-bold mb-0">{{ placement_report.potential_placements}}</span>
+            </div>
+            <div class="col-auto">
+              <i class="bi bi-clock-history"></i>
+
+            </div>
+          </div>
+          <div class="mt-2 mb-0 text-sm">
+            <span class="badge badge-pill bg-soft-danger text-danger me-2">
+              {{ placement_report.student_confirmed}}
+            </span>
+            <span class="text-nowrap text-xs text-muted">Student Placed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-sm-6 col-12">
+      <div class="card shadow border-0">
+        <div class="card-body">
+          <div class="row">
+            <div class="col">
+              <span class="h6 font-semibold text-muted text-sm d-block mb-2"> Total Projects </span>
+              <span class="h3 font-bold mb-0">{{ placement_report.total_projects}}</span>
+            </div>
+            <div class="col-auto">
+
+              <i class="bi bi-people"></i>
+
+            </div>
+          </div>
+          <div class="mt-2 mb-0 text-sm">
+            <span class="badge badge-pill bg-soft-success text-success me-2">
+              {{placement_report.available_placements}}
+            </span>
+            <span class="text-nowrap text-xs text-muted">Available Placements</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-sm-6 col-12">
+      <div class="card shadow border-0">
+        <div class="card-body">
+          <div class="row">
+            <div class="col">
+              <span class="h6 font-semibold text-muted text-sm d-block mb-2">Mentors</span>
+              <span class="h3 font-bold mb-0">{{placement_report.total_mentors}}</span>
+            </div>
+            <div class="col-auto">
+
+              <i class="bi bi-minecart-loaded"></i>
+
+            </div>
+          </div>
+          <div class="mt-2 mb-0 text-sm">
+            <span class="badge badge-pill bg-soft-success text-success me-2">
+              {{placement_report.total_companies}}
+            </span>
+            <span class="text-nowrap text-xs text-muted">Companies</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <br>
+
+  <div>
+    {{ bar_chart|safe }}
+  </div>
+
+
+  <div>
+
+    {{ bar_2_chart|safe }}
+  </div>
+
+
+  <div>
+
+    {{ donut_chart|safe }}
+  </div>
+</div>
+{% endblock %}

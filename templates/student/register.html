@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+
+
+{% block content %}
+
+
+
+<!-- Register form to alloe student add their information into database -->
+<div class="main-container" id="reg-body">
+  <div class="reg-container">
+    <div class="title">Student Registration</div>
+    <div class="reg-content">
+      <!--  -->
+      <form action="" method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <div class="reg-details">
+          <div class="reg-input">
+            <span class="r-detail">{{form.student_id.label}}</span>
+            {{form.student_id(type="text", placeholder="Enter your student id (4 digits)") }}
+          </div>
+
+          <div class="reg-input">
+            <span class="r-detail">{{form.user_name.label}}</span>
+            {{form.user_name(type="text", placeholder="Enter your username") }}
+          </div>
+
+          <div class="reg-input">
+            <span class="r-detail">{{form.password.label}}</span>
+            {{form.password(type="text", placeholder="Enter your password") }}
+          </div>
+
+          <div class="reg-input">
+            <span class="r-detail">{{form.first_name.label}}</span>
+            {{form.first_name(type="text", placeholder="Enter your formal name") }}
+          </div>
+
+          <div class="reg-input">
+            <span class="r-detail">{{form.last_name.label}}</span>
+            {{form.last_name(type="text", placeholder="Enter your formal name") }}
+          </div>
+
+          <div class="reg-input">
+            <span class="r-detail">{{form.preferred_name.label}}</span>
+            {{form.preferred_name(type="text", placeholder="Enter your perferred name") }}
+          </div>
+
+          <div class="reg-input">
+            <span class="r-detail">{{form.email.label}}</span>
+            {{form.email(type="text", placeholder="Enter your email") }}
+              {% for error in form.email.errors%}
+              <div class="alert alert-danger" role="alert">
+                {{error}}
+              </div>
+              {% endfor %}
+          </div>
+
+          <div class="reg-input">
+            <span class="r-detail">{{form.phone.label}}</span>
+            {{form.phone(type="text", placeholder="Enter your phone number") }}
+              {% for error in form.phone.errors%}
+              <div class="alert alert-danger" role="alert">
+                {{error}}
+              </div>
+              {% endfor %}
+          </div>
+
+          <div class="reg-input">
+            <span class="r-detail">{{form.location.label}}</span>
+            {{form.location(type="text") }}
+          </div>
+
+          <div class="reg-input">
+            <span class="r-detail">{{form.need_project.label}}</span>
+            {{form.need_project(type="text", placeholder="Enter your need_project") }}
+          </div>
+          <div class="reg-input">
+            <span class="r-detail">{{form.currently_enrolled.label}}</span>
+            {{form.currently_enrolled(type="text", placeholder="Enter your currently_enrolled") }}
+          </div>
+          <div class="reg-input">
+            <span class="r-detail">{{form.semester_to_place.label}}</span>
+            {{form.semester_to_place(type="text", placeholder="Semester you want to take internship?") }}
+          </div>
+
+          <div class="reg-input">
+            <span class="r-detail">Upload Your Resume:</span>
+            <input type="button" name="cvbutton" id="cvbutton" value="Click to Upload File">
+            <input type="file" name="cv" id="cv" style="line-height: 20px;padding-top: 8px; display:none">
+          </div>
+
+          
+          <div class="reg-input">
+            <span class="r-detail">{{form.skills.label}}</span>
+            {{form.skills(type="text", placeholder="Select your skills") }}
+          </div>
+
+          
+        </div>
+
+        <div class="reg-button">
+          <input type="submit" value="Register">
+        </div>
+        <div class="text-center p-t-2">
+          <a href="{{url_for('login')}}" class="txt3"><i class="bi bi-box-arrow-left"></i> Return to Login page </a>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+
+<script>
+  window.onload = (event) => {
+    clearword();
+  }
+
+  function clearword() {
+    const inputButton = document.querySelector("input[name='cvbutton']")
+    const inputFile = document.querySelector("input[type='file']")
+
+    inputButton.onclick = (event) => {
+      inputFile.click();
+    }
+    inputFile.onchange = (event) => {
+      const files = event.target.files;
+
+      console.log(files);
+    }
+  }
+</script>
+
+{% endblock %}

@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+<div class="main-container" id="reg-body">
+  <div class="wrap-login2">
+
+    <div class="inbox-container">
+
+    </div>
+
+    <div class="inbox-container">
+      <h3 style="margin-bottom: 20px;display: inline-block;">Inbox - {{g.user_name}}</h3>
+
+      <div style="float:right;margin-right: 50px;" class="btn btn-outline-primary profilebt noticebtn">
+        <button data-bs-toggle="modal" data-bs-target="#notice_draft">
+          <i class="bi bi-pencil" style="margin-right: 10px;"></i>Compose</button>
+      </div>
+
+
+      <div class="modal modal-bg fade" id="notice_draft" tabindex="-1"
+          aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content modal-ct">
+              <div class="modal-header">
+                <h4 class="modal-title" style="font-weight: bold;">New Notification</h4>
+              </div>
+
+              <div class="modal-body" id="modal-body">
+                <form method="POST" action="{{url_for('send_notice')}}">
+                  {{ form.hidden_tag() }}
+      
+                  <div class="form-group">
+                    <span>* {{form.subject.label}}</span>
+                    {{ form.subject(type="text") }}
+                  </div>
+        
+                  <div class="form-group">
+                    <span>* {{form.send_to.label}}</span>
+                    {{ form.send_to(type="text", oninput="searchNames(this.value)") }}
+                  </div>
+                  <div class="dropdown">
+                    <ul id="nameList" class="dropdown-menu"></ul>
+                  </div>
+        
+                  <div class="form-group">
+                    <span>* {{form.message.label}}</span>
+                    {{ form.message(type="textarea") }}
+                  </div>
+
+                  <div class="modal-footer justify-content-evenly">
+                    <button class="btn btn-primary modal-btn" style="width:20%;margin:30px auto;" type="submit">Send Notice</button>
+                    <button type="button" class="btn btn-secondary" style="width:20%;margin:30px auto;" data-bs-dismiss="modal">Close</button>
+                  </div>
+
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+        <script>
+          // show matching companies when adding profile
+          function searchNames(searchText) {
+              if (searchText.length > 0) {
+                $.ajax({
+                  url: '{{url_for("search_user")}}',
+                  data: { search: searchText },
+                  success: function(response) {
+                    var matchingNames = response.names;
+                    var nameList = document.getElementById('nameList');
+                    nameList.innerHTML = '';
+          
+                    matchingNames.forEach(function(name) {
+                      var option = document.createElement('li');
+                      option.textContent = name;
+                      option.classList.add('name-option');
+                      option.onclick = function() {
+                        document.getElementById('send_to').value = name;
+                        nameList.innerHTML = '';
+                      };
+                      nameList.appendChild(option);
+                    });
+          
+                    //show list
+                    nameList.style.display = 'block';
+                  },
+                  error: function(xhr, status, error) {
+                    console.error('Request failed. Status:', status);
+                  }
+                });
+              } else {
+                // hide list
+                document.getElementById('nameList').style.display = 'none';
+              }
+            }
+          </script>
+
+      {% if results %}
+      <ul class="email-list">
+        <li class="email-item">
+          <input type="checkbox" class="email-checkbox">
+          <span class="sender" style="font-weight: 700;">Send From</span>
+          <span class="subject" style="font-weight: 700;">Subject</span>
+          <span class="timestamp" style="font-weight: 700;">Time Received</span>
+        </li>
+      </ul>
+
+
+      <ul class="email-list">
+        
+          {% for msg in results %}
+
+            {% if msg.status == 'unread' %}
+          <li class="email-item" style="background-color: rgb(240, 237, 237);">
+            {% else %}
+          <li class="email-item">
+            {% endif %}
+
+            <input type="checkbox" class="email-checkbox" id="checkbox-{{msg.notification_id}}" name="checkbox-{{msg.notification_id}}"
+            value="{{msg.notification_id}}">
+
+            <a role="button" data-bs-toggle="modal" data-bs-target="#notice_info-{{msg.notification_id}}">
+
+              <span class="sender">{{msg.Send_from}}</span>
+              <span class="subject">{{msg.subjects}}</span>
+              <span class="timestamp">{{msg.receive_date}}</span>
+            </a>
+          </li>
+
+
+          <div class="modal modal-bg fade" id="notice_info-{{msg.notification_id}}" tabindex="-1"
+            aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content modal-ct">
+                <div class="modal-header">
+                  <h4 class="modal-title" style="font-weight: bold;">Notification Details</h4>
+                </div>
+
+                <div class="modal-body" id="modal-body">
+                  {{msg.message}}
+                </div>
+
+                <br>
+                <div class="modal-footer justify-content-between">
+                  {% if msg.status == 'unread' %}
+                  <a href="{{url_for('notice_control')}}?read=1&notice_id={{msg.notification_id}}&status={{msg.status}}"
+                    class="btn btn-primary modal-btn float-left" role="button">Mark as Read</a>
+                  {% else %}
+                  <a href=""
+                    class="btn btn-primary modal-btn float-left" role="button">Delete Message</a>
+                  {% endif %}
+                  <button type="button" class="btn btn-secondary float-right" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+          {% endfor %}
+        
+        {% else%}
+        <div style="text-align: center;font-size: 20px;font-weight: 600;">
+          <p style="margin:50px;">You have no messages</p>
+        </div>
+          
+        {% endif %}
+
+      </ul>
+
+      <div style="display:flex;justify-content: space-evenly;margin-top: 50px;">
+        <a href="" class="btn btn-outline-primary profilebt" role="button">Delete Message</a>
+     
+        <a href="{{url_for('login')}}" class="btn btn-outline-primary profilebt" role="button">Back to Dashboard</a>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</div>
+
+
+
+
+
+
+
+
+{% endblock %}
+

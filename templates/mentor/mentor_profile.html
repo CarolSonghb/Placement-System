@@ -1,0 +1,159 @@
+{% extends "sidebar.html" %}
+
+
+
+
+
+{% block content %}
+
+
+
+<div class="row profilerow">
+
+  <div class="col-md-4 img" style="margin-top: 15px; margin-left: 10%; margin-right:25px;">
+    <img src="{{g.Avatar_link}}" class="avatar" alt="avatar">
+
+    <div  style="width:300px;text-align: center;margin-top: 10px;">
+      <form action="{{url_for('update_avatar')}}" method="POST" enctype="multipart/form-data">
+        <button type="button" name="avatarbtn" id="avatarbtn" class="btn btn-outline-primary profilebt">
+          <span class="button-content">
+            <i class="bx bxs-camera-plus"></i>
+            Add profile picture
+          </span>
+        </button>
+        <input type="file" id="avatar" name="avatar"  style="display:none" required> 
+        <p id="file-name-display"></p>
+        <button type="submit" id="upload-button" class="btn btn-primary profilebt" style="display: none; width: 200px;">Upload</button>
+      </form>
+    </div>
+    
+    <script>
+      window.onload = (event) => {
+        clearword();
+      }
+  
+      function clearword() {
+      const inputButton = document.querySelector("button[name='avatarbtn']")
+      const inputFile = document.querySelector("input[name='avatar']")
+      const fileNameDisplay = document.getElementById("file-name-display");
+      const uploadButton = document.getElementById("upload-button");
+
+      inputButton.onclick = (event) => {
+        inputFile.click();
+      }
+      inputFile.onchange = (event) => {
+        const files = event.target.files;
+        const fileName = files[0].name;
+        fileNameDisplay.textContent = fileName; // Set the file name as the text content of the element
+        uploadButton.style.display = "inline"; // Show the upload button
+
+        console.log(files);
+        }
+      }
+    </script>
+
+  </div>
+
+  <div class="col-md-6 details mt-5" style="margin-top: 0px !important;padding-left: 5%;">
+    <blockquote class="profilename">
+      <h5 style="font-weight: 800;">{{mentor_info.first_name}} {{mentor_info.last_name}}</h5>
+    </blockquote>
+    <small>Comany Name</small>
+    <h6>{{mentor_info.company_name}}</h6>
+    <small>Email:</small>
+    <h6>{{mentor_info.email}}</h6>
+    <small>Phone Number:</small>
+    <h6>{{mentor_info.phone}}</h6>
+    <small>Industry:</small>
+    <h6>{{mentor_info.industry}}</h6>
+    <small>Location:</small>
+    <h6>{{mentor_info.location}}</h6>
+    <br>
+    <button type="button" class="btn btn-outline-primary profilebt" id="myBtn" data-bs-toggle="modal" data-bs-target="#editModal"
+      style="padding: 9px 40px;margin-top: 0px !important;">
+      Edit Profile
+    </button>
+
+  </div>
+
+</div>
+
+<!-- Modal Edit Mentor Details-->
+<div class="modal modal-bg fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content modal-ct">
+      <div class="modal-header">
+        <h4 class="modal-title" style="font-weight: bold;">Update Information</h4>
+      </div>
+      <div class="modal-body" id="modal-body">
+
+        <form action="{{url_for('mentor.mentor_profile')}}" method="POST" id="updateform">
+
+          <div class="form-group">
+            <label style="font-weight: bold;">First Name:</label>
+            <input type="hidden" name="mentor_id" value="{{mentor_info.mentor_id}}">
+            <input type="text" class="form-control" id="first_name" name="first_name"
+              value="{{mentor_info.first_name }}" required>
+          </div>
+          <p></P>
+          <div class="form-group">
+            <label style="font-weight: bold;">Last Name:</label>
+            <input type="text" class="form-control" id="last_name" name="last_name" value="{{mentor_info.last_name }}"
+              required>
+          </div>
+          <p></P>
+          <div class="form-group">
+            <label style="font-weight: bold;">Email:</label>
+            <input type="email" class="form-control" id="email" name="email" value="{{mentor_info.email}}" required>
+          </div>
+          <p></P>
+          <div class="form-group">
+            <label for="phone" style="font-weight: bold;">Phone Number:</label>
+            <input type="tel" pattern="[0-9]*" class="form-control" id="phone" name="phone"
+              value="{{mentor_info.phone}}" required>
+          </div>
+          <p></P>
+          <div class="form-group">
+            <label style="font-weight: bold;">Location:</label>
+            <select name="location">
+              {% for l in locations %}
+              {% if l == mentor_info.location %}
+              <option value="{{mentor_info.location}}" selected>{{mentor_info.location}}</option>
+              {% else %}
+              <option value="{{ l }}">{{ l }}</option>
+              {% endif %}
+              {% endfor %}
+            </select>
+          </div>
+          <p></P>
+          <div class="modal-footer  justify-content-between">
+            <button class="btn btn-primary modal-btn float-left" type="submit" id="updateprofile">Update</button>
+            <button type="button" class="btn btn-secondary float-right" data-bs-dismiss="modal">Close</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var btn4 = document.getElementById('updateprofile');
+  var form4 = document.getElementById('updateform');
+
+    btn4.onclick = function(event) {
+      event.preventDefault();
+
+      xtalert.alertConfirm({
+        "confirmText":"Confirm",
+        "cancelText":"Cancel",
+        "msg": "Do you want to update profile?",
+        "confirmCallback": function(){
+          form4.submit();
+        },
+        "cancelCallback": function(){
+        }
+      });
+    };
+</script>
+
+{% endblock %}

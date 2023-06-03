@@ -1,0 +1,570 @@
+{% extends "sidebar.html" %}
+
+{% block content %}
+
+<!-- html templarte to display the mentor's projects -->
+{% if projects %}
+
+<div class="addnew" style="display: flex; justify-content: flex-end; margin-right: 7%;">
+  <span class="sm-quote" style="margin-right: 2%;">Add a new project?</span>
+  <a href="{{url_for('mentor.add_project')}}">
+    <button class="btn btn-outline-primary profilebt" style="font-size: 14px; padding: 5px;width:100px;">Click Here</button>
+  </a>
+</div>
+
+
+{% for project in projects %}
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <article class="blog-card">
+        <div class="blog-card__background">
+          <div class="card__background--wrapper">
+            <div class="card__background--main">
+              <h1 class="back-header">Project Details</h1>
+              <div class="card__background--layer"></div>
+            </div>
+          </div>
+        </div>
+        <div class="blog-card__head">
+          <span class="date__box">
+            <span class="date__day">15</span>
+            <span class="date__month">JUL</span>
+          </span>
+        </div>
+        <div class="blog-card__info">
+          <div class="pro-header" style="display: flex;">
+            <h3 style="font-weight: 700;">{{project.project_title}}</h3>
+
+          </div>
+          <p>
+            <a class="icon-link"><i class="bi bi-calendar-event mx-2"><span style="color:rgb(90, 90, 190);"> Start Date: {{project.start_date}}</span></i> </a>
+            <a class="icon-link"><i class="bi bi-bookmark"><span style="color:rgb(90, 90, 190);"> Placement Number: {{project.place_num}}</span> </i> </a>
+          </p>
+          <h6>Skills Required: </h6>
+
+          {% for skill in project.skills.split(',') %}
+           <span style="color:rgb(90, 90, 190);">{{ skill.strip() }}</span> {% if not loop.last %},{% endif %}
+          {% endfor %}
+          <!-- <p> {{project.skills}} -->
+          </p>
+          <h6>Company Name: </h6>
+          <p style="font-weight: 380;"> {{project.company_name}}
+          </p>
+          <h6> Industry:</h6>
+          <p> {{project.industry}}
+          </p>
+          <h6>Location: </h6>
+          <p> {{project.location}}
+          </p>
+          <h6>Details: </h6>
+          <p>{{project.project_summary}}
+          </p>
+        </div>
+
+        <div style="text-align: center;">
+          <button type="button" class="btn btn-outline-primary profilebt" id="myBtn" data-bs-toggle="modal"
+            data-bs-target="#editModal{{loop.index}}" style="margin:20px auto; font-weight: 500;width:150px;">
+            Edit Project
+          </button>
+
+        </div>
+
+      </article>
+
+      <!-- Modal Edit Project Details-->
+      <div class="modal modal-bg fade" id="editModal{{loop.index}}" tabindex="-100" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content modal-ct">
+            <div class="modal-header">
+              <h4 class="modal-title" style="font-weight: bold;">Update Information</h4>
+            </div>
+            <div class="modal-body" id="modal-body">
+
+              <form action="{{url_for('mentor.projects')}}" method="POST" id="mentorproject">
+                <div class="form-group">
+                  <label for="skills" style="font-weight: bold;">Skills Required:</label>
+                  <select name="skills" id="skills" multiple required>
+                    <option disabled selected>Select skills required</option>
+                    {% for skill in all_skills %}
+                    <option value={{skill.skill_id}}>{{skill.skill_id}} {{skill.details}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <p></P>
+                <div class="form-group">
+                  <label style="font-weight: bold;">Project Date:</label>
+
+                  <input type="date" class="form-control" id="project_date" name="project_date"
+                    value="{{project.start_date}}" required>
+                </div>
+                <p></P>
+                <div class="form-group">
+                  <label style="font-weight: bold;">Placement Number:</label>
+                  <input type="number" class="form-control" id="place_num" name="place_num"
+                    value="{{project.place_num}}" required>
+                </div>
+                <p></P>
+                <div class="form-group">
+                  <label style="font-weight: bold;">Project Summary:</label>
+                  <textarea type="text" rows="4" class="form-control" id="project_sum" name="project_sum"
+                    value="{{project.project_summary}}" required>{{project.project_summary}}</textarea>
+                </div>
+                <p></P>
+
+                <div class="form-group">
+                  <input type="hidden" class="form-control" id="project_id" name="project_id"
+                    value="{{project.project_id}}">
+                  <input type="hidden" class="form-control" id="project_title" name="project_title"
+                    value="{{project.project_title}}">
+                </div>
+
+                <div class="modal-footer justify-content-between">
+                  <button class="btn btn-primary modal-btn float-left" type="submit" id="project_update">Update</button>
+                  <button type="button" class="btn btn-secondary float-right" data-bs-dismiss="modal">Close</button>
+                </div>
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+
+<!-- html page for students who intersted in the mentor's projects -->
+{% elif students_interested_with_project %}
+
+
+<div class="container-fluid">
+  <!-- Card stats -->
+  <div class="row g-6 mb-6" style="display:flex;justify-content: center;margin-bottom:50px;">
+    {% for num in num_matched %}
+    <div class="col-xl-3 col-sm-6 col-12">
+      <div class="card shadow border-0">
+        <div class="card-body" id="prefer-body-{{num.project_id}}">
+          <div class="row">
+            <div class="col">
+              <span class="h6 font-semibold text-muted text-sm d-block mb-2">Project ID</span>
+              <span class="h3 font-bold mb-0">{{num.project_id}}</span>
+            </div>
+
+            <div class="col" style="text-align: center;">
+              <span class="h6 font-semibold text-muted text-sm d-block mb-2"><i class="bi bi-people"></i>&nbsp;
+                Selected</span>
+              {% if num.student_count > num.place_num %}
+              <span class="h3 font-bold mb-0" style="color:rgb(199, 90, 90)">
+                {% else %}
+                <span class="h3 font-bold mb-0">
+                  {% endif %}
+
+                  {{num.student_count}}</span>
+
+            </div>
+            <div class="col-auto">
+
+            </div>
+          </div>
+          <div class="mt-2 mb-0 text-sm">
+            <span class="text-nowrap text-xs text-muted">Total Placements</span>
+            <span class="badge badge-pill bg-soft-success text-success me-2">
+              {{num.place_num}}
+            </span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+
+    {% endfor %}
+  </div>
+</div>
+
+
+<div style="text-align: center;margin-top: 50px;">
+  <a href="{{url_for('mentor.matched_students')}}" role="button" class="btn btn-outline-primary profilebt">View students
+    Selected</a>
+</div>
+
+
+{% if students_interested_with_project | length == 0 %}
+<h4 style="text-align: center;color:rgb(85, 84, 84)">You have matched all students in the list</h4>
+
+{% endif %}
+
+
+{% if students_interested_with_project | length != 0 %}
+<div style="width:100%;margin:30px 0 50px 0; text-align: center;">
+  <span style="font-style: italic;">* Filter by Project ID: </span>
+  <select id="projectSelect" class="custom-select" onchange="filterByProjectId(this.value)">
+    <option value="" selected>All Students</option>
+    {% for id in filter_id %}
+      <option value="{{id}}">Project ID: {{id}}</option>
+    {% endfor %}
+  </select>
+</div>
+{% endif %}
+
+<div id="emptycontent" style="display: none; text-align: center;">
+  <p>No students found for the selected project ID</p>
+</div>
+
+
+{% for student in students_interested_with_project %}
+
+  {% for info in student%}
+
+  <div class="scd-container" id="{{info.project_id}}">
+    <div class="scd-grid">
+      <div class="scd-card-content">
+        <h6 class="pro-cat">{{info.project_id}} -- Student ID: {{info.student_id}}</h6>
+        <h2 class="pro-name">{{info.first_name}} {{info.last_name}}</h2>
+        <p class="pro-des">Submission Status: <span style="color:rgb(70, 70, 223)"> - {{info.submission_status}}</span></p>
+        <p class="pro-des">Location: <span>{{info.location}}</span></p>
+        <p class="pro-des">Email: <span>{{info.email}}</span></p>
+        <p class="pro-des">Phone: <span>{{info.phone}}</span></p>
+
+
+        <p class="pro-des">Skills: &nbsp;
+                 
+          {% for skill in info.skills.split(',') %}
+          <span> {{ skill.strip() }} </span> {% if not loop.last %}, &nbsp;{% endif %}
+          {% endfor %}
+        </p>
+
+        <p class="pro-des">Semester to Place: <span>{{info.semester_to_place}}</span></p>
+        <div class="status">
+          <p class="current-status">Ranking in the student's wishlist: {{info.ranking}}</p>
+
+          {% for sk_match in skill_match %}
+          {% for each_student in sk_match %}
+          {% if info.student_id == each_student.student_id %}
+          <p class="current-status">
+            Skills matched: {{each_student.skills_matched}}
+          </p>
+          {% endif %}
+          {% endfor %}
+          {% endfor %}
+
+          {% if info.pl_status == None %}
+          <p class="current-status">Placement Status: Not Matched</p>
+          {% else %}
+          <p class="current-status">Placement Status: {{info.pl_status}}</p>
+          {% endif %}
+        </div>
+
+        <form action="{{url_for('mentor.students_interested')}}" method="POST">
+          <input type="hidden" name="student_id" value="{{info.student_id}}">
+          <input type="hidden" name="project_id" value="{{info.project_id}}">
+       
+        <div style="width:100%;">
+          <div style="text-align: center;margin:0 !important;position:absolute;bottom:20px;">
+            <button style="width:300px;" class="btn btn-outline-primary profilebt" type="submit" 
+            >Select Student</button>
+          </div>
+        </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  {% endfor %}
+
+{% endfor %}
+
+<script>
+  function filterByProjectId(projectId) {
+    var projectContainers = document.querySelectorAll(".scd-container");
+    var emptyContent = document.getElementById("emptycontent");
+    var hasMatch = false;
+
+    projectContainers.forEach(function(container) {
+      if (container.id === projectId || projectId === "") {
+        container.style.display = "inline-block";
+        hasMatch = true;
+
+      } else {
+        container.style.display = "none";
+      }
+    });
+    emptyContent.style.display = hasMatch ? "none" : "block";
+  }
+</script>
+
+
+
+<div class="pagination">
+  {{pagination.links}}
+</div>
+
+
+
+
+
+<!-- html page for the matched students page -->
+{% elif students_matched %}
+
+
+<div class="container-fluid">
+  <!-- Card stats -->
+  <div class="row g-6 mb-6" style="display:flex;justify-content: center;margin-bottom:50px;">
+    {% for num in num_matched %}
+    <div class="col-xl-3 col-sm-6 col-12">
+      <div class="card shadow border-0">
+        <div class="card-body" id="card-body-{{num.project_id}}" style="cursor: pointer;">
+          <div class="row">
+
+            <div class="col">
+              <span class="h6 font-semibold text-muted text-sm d-block mb-2">Project ID</span>
+              <span class="h3 font-bold mb-0">{{num.project_id}}</span>
+            </div>
+
+            <div class="col" style="text-align: center;">
+              <span class="h6 font-semibold text-muted text-sm d-block mb-2"><i class="bi bi-people"></i>&nbsp;
+                Selected</span>
+              {% if num.student_count > num.place_num %}
+              <span class="h3 font-bold mb-0" style="color:rgb(199, 90, 90)">
+                {% else %}
+                <span class="h3 font-bold mb-0">
+                  {% endif %}
+
+                  {{num.student_count}}</span>
+            </div>
+            <div class="col-auto">
+            </div>
+          </div>
+          <div class="mt-2 mb-0 text-sm">
+            <span class="text-nowrap text-xs text-muted">Total Placements</span>
+            <span class="badge badge-pill bg-soft-success text-success me-2">
+              {{num.place_num}}
+            </span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <script>
+      var cardBody = document.getElementById("card-body-{{ num.project_id }}");
+
+      cardBody.addEventListener("click", function () {
+        var projectId = "{{ num.project_id }}";
+
+        $.ajax({
+          url: "{{ url_for('mentor.matched_students') }}",
+          method: "POST",
+          data: { projectId: projectId },
+          success: function (response) {
+            console.log("success");
+            var get_id = response.get_id;
+            window.location.href = "{{ url_for('mentor.matched_students') }}?get_id=" + get_id;
+          },
+          error: function (xhr, status, error) {
+            console.log("fail");
+          }
+        });
+      });
+    </script>
+
+
+    {% endfor %}
+  </div>
+</div>
+
+
+
+<div style="text-align: center;margin-bottom: 50px;">
+  <a class="btn btn-outline-primary profilebt" href="{{url_for('mentor.matched_students')}}?all=1">Show All Matched Students</a>
+</div>
+
+
+
+{% if students_matched != 'Empty' and students_matched != 'all' %}
+
+<!-- <h3 class="scd-text" style="margin-bottom: 50px;"> Matched Students</h3> -->
+
+{% for student in students_matched %}
+
+
+<div class="scd-container">
+  <div class="scd-grid">
+
+
+    <div class="scd-card-content">
+      <h6 class="pro-cat">{{student.project_title}} - {{student.project_id}}</h6>
+      <h2 class="pro-name">{{student.first_name}} {{student.last_name}}</h2>
+      <p class="pro-des">Student ID: {{student.student_id}}</p>
+      <p class="pro-des">Location: {{student.location}}</p>
+      <p class="pro-des">Email: {{student.email}}</p>
+      <p class="pro-des">Phone: {{student.phone}}</p>
+      <p class="pro-des">Skills: </p>
+      <p class="pro-des">{{student.skills}}</p>
+
+      <div class="status" style="margin-top: 40px;">
+        <p class="current-status">Interview Status: {{student.pl_status}}</p>
+      </div>
+      <!-- need to amend the cv_link -->
+      <a href="{{url_for('static', filename='cv_folder/resume.pdf')}}" download="{{student.first_name}}'s CV">
+        <button class="btn btn-outline-primary profilebt" style="width:300px;position:absolute;bottom:20px;">Download CV</button>
+      </a>
+
+    </div>
+  </div>
+</div>
+
+
+{% endfor %}
+
+{% elif students_matched == 'Empty' %}
+<div style="text-align: center;">
+  <p>No students found for the selected project ID</p>
+</div>
+{% endif %}
+
+
+
+
+
+
+
+
+{% elif placement %}
+
+<h5 style="margin: auto auto 2% 5%;">Project Overview</h5>
+<div class="container-fluid">
+  <!-- Card stats -->
+  <div class="row g-6 mb-6" style="display:flex;justify-content: center;margin-bottom:50px;">
+    {% for num in num_matched %}
+    <div class="col-xl-3 col-sm-6 col-12">
+      <div class="card shadow border-0">
+        <div class="card-body">
+          <div class="row">
+            <div class="col">
+              <span class="h6 font-semibold text-muted text-sm d-block mb-2">Project ID</span>
+              <span class="h3 font-bold mb-0">{{num.project_id}}</span>
+            </div>
+
+            <div class="col" style="text-align: center;">
+              <span class="h6 font-semibold text-muted text-sm d-block mb-2">
+
+                <i class="bi bi-people"></i>&nbsp;Confirmed</span>
+              {% if num.student_count == num.place_num %}
+              <span class="h3 font-bold mb-0" style="color:rgb(214, 100, 100)">
+                {% else %}
+                <span class="h3 font-bold mb-0">
+                  {% endif %}
+
+                  {{num.student_count}}</span>
+            </div>
+            <div class="col-auto">
+
+            </div>
+          </div>
+          <div class="mt-2 mb-0 text-sm">
+            <span class="text-nowrap text-xs text-muted">Total Placements</span>
+            <span class="badge badge-pill bg-soft-success text-success me-2">
+              {{num.place_num}}
+            </span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- <h3 class="scd-text" style="margin-bottom: 50px;"> Update Placement Information</h3> -->
+
+
+<div style="width:100%;margin:50px 0; text-align: center;"> 
+  <span style="font-style: italic;">* Select project ID to view: </span>
+  <select id="projectSelect" class="custom-select" onchange="filterPlacement(this.value)">
+    <option value="" selected>All Projects</option>
+    {% for item in select_id %}
+      <option value="{{item}}">Project ID: {{item}}</option>
+    {% endfor %}
+  </select>
+</div>
+
+
+{% for info in placement %}
+
+{% set control = info.pl_status%}
+
+<div class="scd-container" id="{{info.project_id}}">
+  <div class="scd-grid">
+
+
+    <div class="scd-card-content">
+      <h6 class="pro-cat" style="margin-bottom: 3%;text-align: center;">{{info.project_title}} - {{info.project_id}}</h6>
+      <h2 class="pro-name">{{info.first_name}} {{info.last_name}}</h2>
+      <!-- <p class="pro-des">Student ID: {{info.student_id}}</p> -->
+      <p class="pro-des">Location: <span style="color:rgb(74, 74, 221);font-weight: 600;">{{info.location}}</span></p>
+      <p class="pro-des">Email: {{info.email}}</p>
+      <p class="pro-des">Phone: {{info.phone}}</p>
+      <p class="pro-des">Skills: </p>
+      <p class="pro-des">
+      {% for skill in info.skills.split(',') %}
+        {{ skill.strip() }}{% if not loop.last %}, {% endif %}
+      {% endfor %}
+      </p>
+
+      <form action="{{url_for('mentor.placement')}}" method="POST">
+        <p class="pro-des">
+          <input type="hidden" name="student_id" value="{{info.student_id}}">
+          <input type="hidden" name="project_id" value="{{info.project_id}}">
+          <label class="pro-des" for="status" style="font-size: small; margin-bottom: 3%;margin-top: 50px;">Placement Status:</label>
+          <select name="status" style="border-radius: 7px; font-size: small; padding: 3px;">
+            {% for status in status_option %}
+            <option value="{{info.pl_status}}" selected hidden>{{info.pl_status}}</option>
+            <option value="{{status}}"> {{status}}</option>
+            {% endfor %}
+          </select>
+        </p>
+
+        <div style="position:absolute;bottom:20px;width:300px;">
+          <button class="btn btn-outline-primary profilebt" type="submit" style="width:300px;">Update Placement Status</button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+</div>
+{% endfor %}
+
+<script>
+  function filterPlacement(projectId) {
+    var projectContainers2 = document.querySelectorAll(".scd-container");
+    var emptyContent2 = document.getElementById("emptycontent");
+    var hasMatch2 = false;
+
+    projectContainers2.forEach(function(container) {
+      if (container.id === projectId || projectId === "") {
+        container.style.display = "inline-block";
+        hasMatch = true;
+
+      } else {
+        container.style.display = "none";
+      }
+    });
+    emptyContent2.style.display = hasMatch2 ? "none" : "block";
+  }
+</script>
+
+{% endif %}
+
+
+{% endblock %}

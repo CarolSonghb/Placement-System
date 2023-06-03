@@ -1,0 +1,116 @@
+{% extends "sidebar.html" %}
+
+
+
+
+
+{% block content %}
+
+<div class="dashboard">
+    <h1 class="dashheader">Staff Dashboard</h1>
+    <h5 class="dashsecond">—— Manage Lincoln Placements</h5>
+</div>
+
+<div class="dashfunc mt-5">
+    <div class="dashfunc1">
+        <a href="{{url_for('staff.staff_profile')}}" class="card hover-elevate-up shadow-sm parent-hover card-dash"
+            style="flex: 1;">
+            <div class="card-body d-flex align-items">
+                <span class="bx bxs-graduation dash-icon"></span>
+
+                <span class="ms-3 text-gray-700 parent-hover-primary fs-6 fw-bold">
+                    MY PROFILE
+                </span>
+            </div>
+        </a>
+    </div>
+    <div class="dashfunc1">
+        <a href="{{url_for('staff.staff_student_list')}}" class="card hover-elevate-up shadow-sm parent-hover card-dash"
+            style="flex: 1;">
+            <div class="card-body d-flex align-items">
+                <span class="bx bxs-face dash-icon"></span>
+
+                <span class="ms-3 text-gray-700 parent-hover-primary fs-6 fw-bold">
+                    VIEW STUDENT LIST
+                </span>
+            </div>
+        </a>
+    </div>
+    <div class="dashfunc1">
+        <a href="{{url_for('staff.comp_projects')}}" class="card hover-elevate-up shadow-sm parent-hover card-dash"
+            style="flex: 1;">
+            <div class="card-body d-flex align-items">
+                <span class="bx bxs-buildings dash-icon"></span>
+
+                <span class="ms-3 text-gray-700 parent-hover-primary fs-6 fw-bold">
+                    MANAGE PLACEMENTS
+                </span>
+            </div>
+        </a>
+    </div>
+    <div class="dashfunc1">
+        <a href="{{url_for('staff.all_mentors')}}" class="card hover-elevate-up shadow-sm parent-hover card-dash"
+            style="flex: 1;">
+            <div class="card-body d-flex align-items">
+                <span class='bx bxs-group dash-icon'></span>
+
+                <span class="ms-3 text-gray-700 parent-hover-primary fs-6 fw-bold">
+                    MANAGE MENTORS
+                </span>
+            </div>
+        </a>
+    </div>
+    <div class="dashfunc1">
+        <a href="{{url_for('staff.staff_add_mentor')}}" class="card hover-elevate-up shadow-sm parent-hover card-dash"
+            style="flex: 1;">
+            <div class="card-body d-flex align-items">
+                <span class="bx bxs-add-to-queue dash-icon"></span>
+
+                <span class="ms-3 text-gray-700 parent-hover-primary fs-6 fw-bold">
+                    ADD A NEW MENTOR
+                </span>
+            </div>
+        </a>
+    </div>
+    <div class="dashfunc1">
+        <a href="{{url_for('staff.staff_placement_info')}}" class="card hover-elevate-up shadow-sm parent-hover card-dash"
+            style="flex: 1;">
+            <div class="card-body d-flex align-items">
+                <span class="bx bxs-notepad dash-icon"></span>
+
+                <span class="ms-3 text-gray-700 parent-hover-primary fs-6 fw-bold">
+                    PLACEMENT REPORT
+                </span>
+            </div>
+        </a>
+    </div>
+    <div class="dashfunc1" style="margin-right: auto;">
+        <a href="{{url_for('send_notice')}}" class="card hover-elevate-up shadow-sm parent-hover card-dash"
+        style="flex: 1;">
+            <div class="card-body d-flex align-items">
+                <span class="bx bx-envelope dash-icon"></span>
+
+                <span class="ms-3 text-gray-700 parent-hover-primary fs-6 fw-bold">
+                    NOTIFICATION
+                </span>
+            </div>
+        </a>
+    </div>
+    
+    <div class="dashfunc1" style="margin-right: auto;">
+        <a href="{{url_for('change_password')}}" class="card hover-elevate-up shadow-sm parent-hover card-dash"
+        style="flex: 1;">
+            <div class="card-body d-flex align-items">
+                <span class="bx bxs-cog dash-icon"></span>
+
+                <span class="ms-3 text-gray-700 parent-hover-primary fs-6 fw-bold">
+                    CHANGE MY PASSWORD
+                </span>
+            </div>
+        </a>
+    </div>
+
+</div>
+
+
+{% endblock %}

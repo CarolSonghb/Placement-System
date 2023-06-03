@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+
+
+{% block title %}500 Internal Server Error {% endblock %}
+
+
+{% block content %}
+
+
+<div class="error_container">
+  <h3 class="heading mt-4">&#129327; 500 OOOOPS! Something went wrong .</h3>
+  <p>Group 25 is currently working on this issue. Please try again later.</p>
+  <img src="https://source.unsplash.com/1280x720/?cafe" alt="Random Photo" style="max-width: 100%;" />
+  {{ error }}
+</div>
+
+
+
+
+
+
+{% endblock %}

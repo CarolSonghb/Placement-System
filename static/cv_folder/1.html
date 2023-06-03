@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My Webpage</title>
+    <style>
+      /* CSS for navigation bar */
+      .navbar {
+        background-color: #333;
+        overflow: hidden;
+        position: fixed;
+        top: 0;
+        width: 100%;
+      }
+
+      .navbar a {
+        float: left;
+        color: #f2f2f2;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 18px;
+      }
+
+      .navbar a:hover {
+        background-color: #ddd;
+        color: black;
+      }
+
+      .navbar a.active {
+        background-color: #4CAF50;
+        color: white;
+      }
+
+      /* CSS for sidebar */
+      .sidebar {
+        height: 100%;
+        width: 250px;
+        position: fixed;
+        z-index: 1;
+        top: 60px;
+        left: -250px;
+        background-color: #333;
+        transition: all 0.3s ease-in-out;
+      }
+
+      .sidebar.show {
+        left: 0;
+      }
+
+      .sidebar a {
+        padding: 20px;
+        display: block;
+        color: white;
+        font-size: 18px;
+        text-decoration: none;
+      }
+
+      .sidebar a:hover {
+        background-color: #4CAF50;
+        color: white;
+      }
+
+      /* CSS for main content */
+      .main {
+        margin-top: 80px;
+        margin-left: 250px;
+        padding: 20px;
+        background-color: #f1f1f1;
+        height: 100%;
+      }
+
+      @media screen and (max-width: 768px) {
+        .sidebar {
+          left: -250px;
+        }
+        .sidebar.show {
+          left: 0;
+        }
+        .main {
+          margin-left: 0;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Navigation bar -->
+    <div class="navbar">
+      <a href="#">Home</a>
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+      <a href="#" class="active">Dashboard</a>
+      <a href="#" style="float: right">Logout</a>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+      <a href="#">Dashboard</a>
+      <a href="#">Customers</a>
+      <a href="#">Orders</a>
+      <a href="#">Products</a>
+      <a href="#">Settings</a>
+    </div>
+
+    <!-- Main content -->
+    <div class="main">
+      <h1>Dashboard</h1>
+      <p>Welcome to your dashboard. You can view and manage your orders, customers, and products here.</p>
+      <button onclick="toggleSidebar()">Open Sidebar</button>
+    </div>
+
+    <script>
+      function toggleSidebar() {
+        var sidebar = document.getElementById("sidebar");
+        sidebar.classList.toggle("show");
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,95 @@
+{% extends "sidebar.html" %}
+
+
+
+
+
+{% block content %}
+
+<div class="dashboard">
+    <h1 class="dashheader">Mentor Dashboard</h1>
+    <h5 class="dashsecond">—— Manage your Placement</h5>
+</div>
+
+<div class="dashfunc mt-5">
+    <div class="dashfunc1">
+        <a href="{{url_for('mentor.mentor_profile')}}" class="card hover-elevate-up shadow-sm parent-hover card-dash"
+            style="flex: 1;">
+            <div class="card-body d-flex align-items">
+                <span class="bx bxs-graduation dash-icon"></span>
+
+                <span class="ms-3 text-gray-700 parent-hover-primary fs-6 fw-bold">
+                    MY PROFILE
+                </span>
+            </div>
+        </a>
+    </div>
+    <div class="dashfunc1">
+        <a href="{{url_for('mentor.projects')}}" class="card hover-elevate-up shadow-sm parent-hover card-dash"
+            style="flex: 1;">
+            <div class="card-body d-flex align-items">
+                <span class="bx bxs-add-to-queue dash-icon"></span>
+
+                <span class="ms-3 text-gray-700 parent-hover-primary fs-6 fw-bold">
+                    VIEW / ADD PROJECTS
+                </span>
+            </div>
+        </a>
+    </div>
+
+    <div class="dashfunc1">
+        <a href="{{url_for('mentor.matched_students')}}" class="card hover-elevate-up shadow-sm parent-hover card-dash"
+            style="flex: 1;">
+            <div class="card-body d-flex align-items">
+                <span class='bx bxs-face dash-icon'></span>
+
+                <span class="ms-3 text-gray-700 parent-hover-primary fs-6 fw-bold">
+                    SELECTED STUDENTS
+                </span>
+            </div>
+        </a>
+    </div>
+    
+    <div class="dashfunc1">
+        <a href="{{url_for('mentor.placement')}}" class="card hover-elevate-up shadow-sm parent-hover card-dash"
+            style="flex: 1;">
+            <div class="card-body d-flex align-items">
+                <span class="bx bx-list-ul dash-icon"></span>
+
+                <span class="ms-3 text-gray-700 parent-hover-primary fs-6 fw-bold">
+                    PLACEMENT UPDATE
+                </span>
+            </div>
+        </a>
+    </div>
+
+
+    <div class="dashfunc1">
+        <a href="{{url_for('send_notice')}}" class="card hover-elevate-up shadow-sm parent-hover card-dash"
+        style="flex: 1;">
+            <div class="card-body d-flex align-items">
+                <span class="bx bx-envelope dash-icon"></span>
+
+                <span class="ms-3 text-gray-700 parent-hover-primary fs-6 fw-bold">
+                    NOTIFICATION
+                </span>
+            </div>
+        </a>
+    </div>
+
+    <div class="dashfunc1">
+        <a href="{{url_for('change_password')}}" class="card hover-elevate-up shadow-sm parent-hover card-dash"
+            style="flex: 1;">
+            <div class="card-body d-flex align-items">
+                <span class="bx bxs-cog dash-icon"></span>
+
+                <span class="ms-3 text-gray-700 parent-hover-primary fs-6 fw-bold">
+                    CHANGE MY PASSWORD
+                </span>
+            </div>
+        </a>
+    </div>
+</div>
+
+
+{% endblock %}

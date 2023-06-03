@@ -1,0 +1,69 @@
+{% extends "sidebar.html" %}
+
+
+
+{% block content %}
+<style>
+  label {
+    font-size: large;
+    margin-bottom: 1%;
+  }
+</style>
+
+<!-- <h3 class="scd-text">Add New Project</h3> -->
+
+<div class="contact-wrapper" id="section3">
+  <a id="contact" class="js--wp-3" name="contact"></a>
+  <div class="row">
+    <div class="form-wrapper">
+      <h2 class="contact-title" style="text-align: center;font-weight: 600;margin-bottom: 40PX;">Add Project</h2>
+
+      <div class="form-inner-wrapper">
+        <form action="{{url_for('mentor.add_project')}}" id="contactForm" method="POST">
+          <div class="field-list clear">
+            <div id="addform" class="form-item field">
+              <label class="title" for="project_title">* Project Title</label>
+              <input type="text" class="field-element" id="project_title" name="project_title" placeholder="Enter name for the project" required>
+            </div>
+            
+            <div id="addform" class="form-item field">
+              <label class="title" for="place_num">* Placement Number</label>
+              <input type="text" class="field-element" id="place_num" name="place_num" placeholder="Enter number of students for the project" pattern="[0-9]+" required>
+            </div>
+            
+            <div id="addform" class="form-item field">
+              <label class="title" for="start_date">* Project Start Date</label>
+              <input type="date" class="field-element" id="start_date" name="start_date" placeholder="Enter a start date" required>
+            </div>
+            
+            <div id="addform" class="form-item field textarea">
+              <label class="title" for="textarea-field">* Project Summary</label>
+              <textarea class="field-element" type="text" id="project_summary" name="project_summary" placeholder="This project is ..." required></textarea>
+            </div>
+            
+            <div id="addform" class="form-item field">
+              <label class="title" for="skills">* Skills Required 
+                <span style="color: grey; font-style: italic; font-size: smaller;"> 
+                  * Hold shift to select multiple skills</span></label><br>
+              <select class="skillbox" name="skills" id="skills" multiple required>
+                <option disabled selected>Select skills required</option>
+                {% for skill in all_skills %}
+                <option value="{{ skill.skill_id }}">{{ skill.skill_id }} {{ skill.details }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          
+
+            <div id="contactResponse"></div>
+            <div class="form-button-wrapper form-button-wrapper--align-center" style="margin-bottom: 40px;margin-top: 6%;">
+              <input class="btn btn-outline-primary profilebt" style="width:150px;margin-right: 20px;" type="submit" value="Submit">
+              <input style="width:150px; margin-right: 3%;" class="btn btn-primary profilebt" type="reset" name="reset" value="Reset">
+            </div>
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

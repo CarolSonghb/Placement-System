@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+
+
+{% block content %}
+
+
+<div class="main-container" id="index-page">
+  <div class="wrap-index" onclick="window.location.href='/login'">
+
+    <div class="index-pic">
+      <img src="{{url_for('static', filename='/img/lincoln-logo-3.jpeg')}}" alt="IMG">
+    </div>
+    <h3>Welcome to Lincoln University</h3>
+    <h3> Industry Project Placement System</h3>
+    <div style="text-align: center; margin-top: 6%;">
+      <a class="txt3">Click here to start</a>
+    </div>
+
+
+  </div>
+</div>
+
+
+
+{% endblock %}

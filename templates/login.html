@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+
+
+{% block content %}
+
+
+
+
+{% if user_name is none %}
+
+<div class="main-container" id="index-page">
+  <div class="wrap-login">
+
+    <div class="login-pic">
+      <img src="{{url_for('static', filename='/img/lincoln-logo-3.jpeg')}}" alt="IMG">
+    </div>
+
+    <form class="login-form" method="POST" action="{{ url_for('login')}}">
+      {{ form.hidden_tag() }}
+
+      <span class="login-form-title">IPPS Login</span>
+
+      <div class="wrap-input">
+        {{ form.user_name(class="log-input", placeholder="Username") }}
+        <span class="focus-input"></span>
+        <span class="symbol-input">
+          <i class="bi bi-microsoft-teams"></i>
+        </span>
+      </div>
+
+      <div class="wrap-input">
+        {{ form.password(class="log-input", placeholder="Password", type="password", id="pswd") }}
+
+        <span class="focus-input"></span>
+        <span class="symbol-input">
+          <i class="bi bi-lock-fill"></i>
+        </span>
+        <i class="bi bi-eye" id="password_hide"></i>
+      </div>
+
+      <div class="login-form-btn-container">
+        {{ form.submit(class="login-form-btn")}}
+      </div>
+
+      <div class="text-center p-t-1">
+        <a href="{{url_for('password')}}" class="txt2" id="testsimon">Forgot Password ?</a>
+      </div>
+      <div class="text-center p-t-2" id="create-acc">
+        <a href="{{url_for('student.student_register')}}" class="txt3">Create Your Account <i
+            class="bi bi-person-add"></i></a>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+
+{% else %}
+
+<div class="main-container" id="index-page"> No User </div>
+
+{% endif %}
+
+
+<script>
+  var ilock = document.getElementById('password_hide')
+  var pswd = document.getElementById('pswd')
+  var flag = 0;
+  ilock.onclick = function () {
+    if (flag == 0) {
+      pswd.type = 'text';
+      flag = 1;
+    } else {
+      pswd.type = 'password';
+      flag = 0;
+    }
+  }
+
+</script>
+{% endblock %}
