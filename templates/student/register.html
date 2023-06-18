@@ -11,7 +11,6 @@
   <div class="reg-container">
     <div class="title">Student Registration</div>
     <div class="reg-content">
-      <!--  -->
       <form action="" method="POST" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
         <div class="reg-details">
@@ -48,21 +47,21 @@
           <div class="reg-input">
             <span class="r-detail">{{form.email.label}}</span>
             {{form.email(type="text", placeholder="Enter your email") }}
-              {% for error in form.email.errors%}
-              <div class="alert alert-danger" role="alert">
-                {{error}}
-              </div>
-              {% endfor %}
+            {% for error in form.email.errors%}
+            <div class="alert alert-danger" role="alert">
+              {{error}}
+            </div>
+            {% endfor %}
           </div>
 
           <div class="reg-input">
             <span class="r-detail">{{form.phone.label}}</span>
             {{form.phone(type="text", placeholder="Enter your phone number") }}
-              {% for error in form.phone.errors%}
-              <div class="alert alert-danger" role="alert">
-                {{error}}
-              </div>
-              {% endfor %}
+            {% for error in form.phone.errors%}
+            <div class="alert alert-danger" role="alert">
+              {{error}}
+            </div>
+            {% endfor %}
           </div>
 
           <div class="reg-input">
@@ -89,13 +88,13 @@
             <input type="file" name="cv" id="cv" style="line-height: 20px;padding-top: 8px; display:none">
           </div>
 
-          
+
           <div class="reg-input">
             <span class="r-detail">{{form.skills.label}}</span>
             {{form.skills(type="text", placeholder="Select your skills") }}
           </div>
 
-          
+
         </div>
 
         <div class="reg-button">

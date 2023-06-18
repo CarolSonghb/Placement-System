@@ -56,9 +56,9 @@
             <input type="text" class="searchTerm" id="student_id" name="student_id" placeholder="Student ID">
             <input type="text" class="searchTerm" id="first_name" name="first_name" placeholder="First Name">
             <input type="text" class="searchTerm" id="last_name" name="last_name" placeholder="Last Name">
-            
+
             <select class="searchTerm" style="color:black" name="searchstatus" id="searchstatus">
-                <option value="" disabled selected>Status</option>
+                <option value="">Status</option>
                 <option value="is null">Not been placed</option>
                 <option value="= 'Matched' ">Matched</option>
                 <option value="= 'Confirmed' ">Confirmed</option>
@@ -72,206 +72,193 @@
 </form>
 
 
-    {% if record %}
-    <h3 class="scd-text" style="color:rgb(50, 50, 163);margin-bottom: 20px;">{{record}} records found</h4>
-    {% endif %}
+{% if record %}
+<div class="button1-container">
+    <button style="margin:0 auto">
+        <a href="{{url_for('staff.staff_student_list')}}"  class="btn btn-primary" >Show full list</a></button>
+</div>
 
-
-    <!-- <div style="width:100%;margin:50px 0; text-align: center;">
-        <select id="projectSelect" class="custom-select" onchange="filterByStatus(this.value)">
-            <option value="" selected disabled>Search Status</option>
-            <option value="all">All Students</option>
-            <option value="= 'Matched'">Status: Matched</option>
-            <option value="= 'Confirmed'">Status: Confirmed</option>
-            <option value="is null">Status: No Placement</option>
-
-        </select>
-    </div> -->
-
-    <!-- <script>
-        $('#projectSelect').on('change', function() {
-        var selectedOption = $(this).val(); 
-
-        var url = '{{url_for("staff.staff_student_list")}}?option=' + selectedOption;
-
-        window.location.href = url;
-        });
-    </script> -->
+<h5 class="text-success" style="text-align: center; margin-bottom: 3%;"> {{record}} results found</h5>
+{% endif %}
 
 
 
-    {% for info in student_list %}
-    <div class="scd-container" id="{{info.project_id}}" style="margin-top: 20px;">
-        <div class="scd-grid">
-            <div class="scd-card-content">
-                <h6 class="pro-cat" id="student-{{info.student_id}}">Student ID: {{info.student_id}}</h6>
-                <h2 class="pro-name">{{info.first_name}} {{info.last_name}}</h2>
 
-                {% set student_name = info.first_name + info.last_name %}
+{% for info in student_list %}
+<div class="scd-container" id="{{info.project_id}}" style="margin-top: 20px;">
+    <div class="scd-grid">
+        <div class="scd-card-content">
+            <h6 class="pro-cat" id="student-{{info.student_id}}">Student ID: {{info.student_id}}</h6>
+            <h2 class="pro-name">{{info.first_name}} {{info.last_name}}</h2>
 
-                {% if info.pl_status == 'Matched' %}
-                <p class="current-status">Placement Status: Matched</p>
-                {% elif info.pl_status == 'Confirmed' %}
-                <p class="current-status">Placement Status: Confirmed</p>
-                {% else %}
-                <p class="current-status" style="color:#d65656">Placement Status: No Placement</p>
-                {% endif %}
+            {% set student_name = info.first_name + info.last_name %}
 
-                <p class="pro-des">Location: <span style="color:rgb(72, 72, 192);font-weight: 600;">{{info.location}}</span></p>
-                <p class="pro-des">Email: {{info.email}}</p>
-                <p class="pro-des">Phone: {{info.phone}}</p>
+            {% if info.pl_status == 'Matched' %}
+            <p class="current-status">Placement Status: Matched</p>
+            {% elif info.pl_status == 'Confirmed' %}
+            <p class="current-status">Placement Status: Confirmed</p>
+            {% else %}
+            <p class="current-status" style="color:#d65656">Placement Status: No Placement</p>
+            {% endif %}
 
-                <p class="pro-des">Skills: 
-                    {% for skill in info.skills.split(',') %}
-                    {{ skill.strip() }}{% if not loop.last %}, {% endif %}
-                  {% endfor %}
-                </p>
+            <p class="pro-des">Location: <span style="color:rgb(72, 72, 192);font-weight: 600;">{{info.location}}</span>
+            </p>
+            <p class="pro-des">Email: {{info.email}}</p>
+            <p class="pro-des">Phone: {{info.phone}}</p>
 
-
-                {% if info.currently_enrolled == 1 %}
-                <p class="pro-des">Currently Enrolled</p>
-                {% else %}
-                <p class="pro-des">Not Enrolled</p>
-                {% endif %}
-                <p class="pro-des">Semester to Place: {{info.semester_to_place}}</p>
-
-                <div class="status" style="position:absolute;bottom:65px;width:300px;">
-                    {% if info.cv_link %}
-                    <a class="btn btn-outline-primary profilebt" href="{{ info.cv_link }}"
-                        download="{{info.first_name}}'s CV" style="width:100%;font-size: 10px;">
-                        Download CV
-                    </a>
-                    {% else %}
-                    <p class="current-status" style="line-height:30px;margin-bottom: 0;">CV has not been uploaded</p>
-                    {% endif %}
-                </div>
-                
-                {% if info.pl_status != 'Confirmed' and info.pl_status != 'Matched' %}
-                <div style="position:absolute;bottom:20px;width:300px;">
-                    <a href="{{url_for('staff.staff_match_student')}}?student_id={{info.student_id}}&student_name={{student_name}}" 
-                    class="btn btn-outline-primary profilebt" style="width:100%;font-size: 10px;margin-top: 10px;">Match to Project</a>
-                </div>
-                {% else %}
-                <div style="position:absolute;bottom:20px;width:300px;">
-                    <a class="btn btn-outline-success profilebt" style="width:100%;font-size: 10px;margin-top: 10px;cursor: normal;">
-                        Project has been Matched</a>
-                </div>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-
-    {% endfor %}
+            <p class="pro-des">Skills:
+                {% for skill in info.skills.split(',') %}
+                {{ skill.strip() }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </p>
 
 
-    <div class="pagination">
-        {{pagination.links}}
-    </div>
+            {% if info.currently_enrolled == 1 %}
+            <p class="pro-des">Currently Enrolled</p>
+            {% else %}
+            <p class="pro-des">Not Enrolled</p>
+            {% endif %}
+            <p class="pro-des">Semester to Place: {{info.semester_to_place}}</p>
 
-
-
-    {% elif student_need_list %}
-
-
-    <h3 class="scd-text">Students Need Project</h3>
-
-    {%for info in student_need_list %}
-    <div class="wlist-container">
-        <div class="wlist " style="width:50rem;">
-
-            <div class="wlist-preview" style="width:17.5rem; ">
-                <h3><small>Student ID:</small> {{info.student_id}}</h3>
-
-                <h1>{{info.first_name}} {{info.last_name}}</h1>
-                <br>
-                <br>
-                {% if info.currently_enrolled == 1 %}
-                <h3>Currently Enrolled</h3>
-                {% else %}
-                <h3>Not Enrolled</h3>
-                {% endif %}
-                <h3>Semester to be placed: {{info.semester_to_place}}</h3>
-            </div>
-            <div class="wlist-info">
-
-                <h3>Location: {{info.location}}
-                    {% if info.pl_status == None %}
-                    <span style="color:black; margin-left: 150px;font-weight: 800;">Placement
-                        Status: Not Placed</span>
-                    {% else %}
-                    <span style="color:#8E37D7; margin-left: 150px;font-weight: 800;">Placement
-                        Status: {{info.pl_status}}</span>
-                    {% endif %}
-                </h3>
-                <h1>Skills:</h1>
-                <h3>{{info.skills}}</h3>
-                <br>
-                <h3>Email:{{info.email}}</h3>
-                <h3>Phone:{{info.phone}}</h3>
-
-                <br>
-
-                <form action="{{url_for('staff.staff_student_list')}}" method="POST">
-
-                    <input type="hidden" name="student_id" value="{{info.student_id}}">
-                    <label class="pro-des" for="status">Placement Status:</label>
-                    <select name="status">
-                        <option value="" selected>{{info.pl_status}}</option>
-                        {% for status in status_options %}
-                        <option value="{{ status }}"> {{status}}</option>
-                        {% endfor %}
-                    </select>
-                    <div style="display:flex;">
-                        <button class="wlist-btn" type="submit">Submit</button>
-                    </div>
-                </form>
-            </div>
-
-        </div>
-    </div>
-    {% endfor %}
-
-    <div class="pagination">
-        {{pagination.links}}
-    </div>
-
-
-    {% elif student_matched_list %}
-
-
-
-    <h3 class="scd-text">Students Matched With Project</h3>
-
-    {% for info in student_matched_list %}
-
-    <div class="scd-container">
-        <div class="scd-grid">
-
-
-            <div class="scd-card-content">
-                <h6 class="pro-cat">ID: {{info.student_id}}</h6>
-                <h2 class="pro-name">{{info.first_name}} {{info.last_name}}</h2>
-                <p class="pro-des">Industry: {{info.industry}}</p>
-                <p class="pro-des">Company Name: {{info.company_name}}</p>
-                <p class="pro-des">Mentor's Name: {{info.first}} {{info.last}}</p>
-
-                <div class="status">
-                    <p class="current-status">Placement Status: {{info.pl_status}}</p>
-                </div>
-                <a href="">
-                    <button class="scd-cta">Contact Mentor</button>
+            <div class="status" style="position:absolute;bottom:65px;width:300px;">
+                {% if info.cv_link %}
+                <a class="btn btn-outline-primary profilebt" href="{{ info.cv_link }}"
+                    download="{{info.first_name}}'s CV" style="width:100%;font-size: 10px;">
+                    Download CV
                 </a>
-
+                {% else %}
+                <p class="current-status" style="line-height:30px;margin-bottom: 0;">CV has not been uploaded</p>
+                {% endif %}
             </div>
+
+            {% if info.pl_status != 'Confirmed' and info.pl_status != 'Matched' %}
+            <div style="position:absolute;bottom:20px;width:300px;">
+                <a href="{{url_for('staff.staff_match_student')}}?student_id={{info.student_id}}&student_name={{student_name}}"
+                    class="btn btn-outline-primary profilebt" style="width:100%;font-size: 10px;margin-top: 10px;">Match
+                    to Project</a>
+            </div>
+            {% else %}
+            <div style="position:absolute;bottom:20px;width:300px;">
+                <a class="btn btn-outline-success profilebt"
+                    style="width:100%;font-size: 10px;margin-top: 10px;cursor: normal;">
+                    Project has been Matched</a>
+            </div>
+            {% endif %}
         </div>
     </div>
-    {% endfor %}
+</div>
+
+{% endfor %}
+
+
+<div class="pagination">
+    {{pagination.links}}
+</div>
 
 
 
-    <div class="pagination">
-        {{pagination.links}}
+{% elif student_need_list %}
+
+
+<h3 class="scd-text">Students Need Project</h3>
+
+{%for info in student_need_list %}
+<div class="wlist-container">
+    <div class="wlist " style="width:50rem;">
+
+        <div class="wlist-preview" style="width:17.5rem; ">
+            <h3><small>Student ID:</small> {{info.student_id}}</h3>
+
+            <h1>{{info.first_name}} {{info.last_name}}</h1>
+            <br>
+            <br>
+            {% if info.currently_enrolled == 1 %}
+            <h3>Currently Enrolled</h3>
+            {% else %}
+            <h3>Not Enrolled</h3>
+            {% endif %}
+            <h3>Semester to be placed: {{info.semester_to_place}}</h3>
+        </div>
+        <div class="wlist-info">
+
+            <h3>Location: {{info.location}}
+                {% if info.pl_status == None %}
+                <span style="color:black; margin-left: 150px;font-weight: 800;">Placement
+                    Status: Not Placed</span>
+                {% else %}
+                <span style="color:#8E37D7; margin-left: 150px;font-weight: 800;">Placement
+                    Status: {{info.pl_status}}</span>
+                {% endif %}
+            </h3>
+            <h1>Skills:</h1>
+            <h3>{{info.skills}}</h3>
+            <br>
+            <h3>Email:{{info.email}}</h3>
+            <h3>Phone:{{info.phone}}</h3>
+
+            <br>
+
+            <form action="{{url_for('staff.staff_student_list')}}" method="POST">
+
+                <input type="hidden" name="student_id" value="{{info.student_id}}">
+                <label class="pro-des" for="status">Placement Status:</label>
+                <select name="status">
+                    <option value="" selected>{{info.pl_status}}</option>
+                    {% for status in status_options %}
+                    <option value="{{ status }}"> {{status}}</option>
+                    {% endfor %}
+                </select>
+                <div style="display:flex;">
+                    <button class="wlist-btn" type="submit">Submit</button>
+                </div>
+            </form>
+        </div>
+
     </div>
+</div>
+{% endfor %}
 
-    {% endif %}
-    {% endblock %}
+<div class="pagination">
+    {{pagination.links}}
+</div>
+
+
+{% elif student_matched_list %}
+
+
+
+<h3 class="scd-text">Students Matched With Project</h3>
+
+{% for info in student_matched_list %}
+
+<div class="scd-container">
+    <div class="scd-grid">
+
+
+        <div class="scd-card-content">
+            <h6 class="pro-cat">ID: {{info.student_id}}</h6>
+            <h2 class="pro-name">{{info.first_name}} {{info.last_name}}</h2>
+            <p class="pro-des">Industry: {{info.industry}}</p>
+            <p class="pro-des">Company Name: {{info.company_name}}</p>
+            <p class="pro-des">Mentor's Name: {{info.first}} {{info.last}}</p>
+
+            <div class="status">
+                <p class="current-status">Placement Status: {{info.pl_status}}</p>
+            </div>
+            <a href="">
+                <button class="scd-cta">Contact Mentor</button>
+            </a>
+
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+
+
+<div class="pagination">
+    {{pagination.links}}
+</div>
+
+{% endif %}
+{% endblock %}

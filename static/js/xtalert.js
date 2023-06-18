@@ -28,7 +28,7 @@ var xtalert = {
 
     'alertConfirm':function (params) {
         swal({
-            'title': params['title'] ? params['title'] : 'Alert',
+            'title': params['title'] ? params['title'] : 'Confirm',
             'showCancelButton': true,
             'showConfirmButton': true,
             'type': params['type'] ? params['type'] : '',

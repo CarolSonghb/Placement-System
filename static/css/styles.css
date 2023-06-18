@@ -236,14 +236,7 @@ input:focus:invalid {
   /* margin-left: 50px; */
 }
 
-/*  simon css for fun  */
-.simon1 a{
-  display:block;
-}
 
-.simonfun1{
-  width:60%;
-}
 
 #password_hide{
   position: absolute;
@@ -271,9 +264,7 @@ input:focus:invalid {
   margin-top:20px;
 }
 
-.simon-input1{
-  width:80%;
-}
+
 
 #cvbutton{
   background-color: #fff;
@@ -407,5 +398,29 @@ nav.breadcrumb li a:hover {
 }
 
 #notice_draft .dropdown-menu li:hover {
+  background-color: #f8f8f8;
+}
+
+#interset_form .dropdown {
+  display: inline-block;
+  margin-left: 20%;
+}
+
+#interset_form .dropdown-menu {
+  display: none;
+  list-style: none;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 5px;
+  margin: 0;
+  z-index: 999;
+}
+
+#interset_form .dropdown-menu li {
+  cursor: pointer;
+  padding: 5px;
+}
+
+#interset_form .dropdown-menu li:hover {
   background-color: #f8f8f8;
 }

@@ -64,8 +64,10 @@
   </div>
 </div>
 <div style="display:flex;justify-content: center; margin-top: 5%;">
-  <button class="btn btn-outline-primary profilebt" onclick="printDiv()" style="width:200px;">Print this Page</button>
+  <div style="margin-right: 10px;"><a href="{{url_for('student.all_projects')}}" style="width:150px" role="button"
+      class="btn btn-outline-primary profilebt">Back</a></div>
 
+  <button class="btn btn-outline-primary profilebt" onclick="printDiv()" style="width:200px;">Print this Page</button>
 </div>
 
 <script>
@@ -87,6 +89,55 @@
 </div>
 
 {% else %}
+
+<div>
+  <a role="button" data-bs-toggle="modal" data-bs-target="#interset_form">Submit Interest List</a>
+</div>
+
+<div class="modal modal-bg fade" id="interset_form" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+  style="z-index: 999;">
+  <div class="modal-dialog">
+    <div class="modal-content modal-ct">
+      <div class="modal-header">
+        <h4 class="modal-title" style="font-weight: bold;">Interest Form</h4>
+      </div>
+
+      <div class="modal-body" id="modal-body">
+        <form method="POST" action="{{url_for('student.all_projects')}}">
+
+          <div class="form-group">
+            <input type="hidden" id="interest" name="interest" value="1">
+          </div>
+
+          <div class="form-group">
+            <label for="industry">Industry</label>
+            <input type="text" id="industry" name="industry">
+          </div>
+
+          <div class="form-group">
+            <label for="location">Location</label>
+            <input type="text" id="location" name="location">
+          </div>
+
+          <div class="form-group">
+            <label for="skills">Skills</label>
+            <input type="text" id="skills" name="skills">
+          </div>
+
+          <div class="modal-footer justify-content-evenly">
+            <button class="btn btn-primary modal-btn" style="width:20%;margin:30px auto;" type="submit">Send
+            </button>
+            <button type="button" class="btn btn-secondary" style="width:20%;margin:30px auto;"
+              data-bs-dismiss="modal">Close</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <h4 class="scd-text" style="margin-bottom: 30px;">Company and Project List</h4>
 
 <form action="{{url_for('student.all_projects')}}" method="POST">
@@ -172,7 +223,7 @@
 
       <div>
         <a href="{{url_for('student.all_projects')}}?detail=1&project_id={{project.project_id}}&add=1"><button
-            class="btn simon"
+            class="btn new-btn"
             style="background-color: #F0F4F7;border:2px solid #4564ff;color:#4564ff;font-weight: 500;">Details <i
               class="bi bi-arrow-right-short"></i></button></a></button>
 

@@ -82,13 +82,17 @@
         <h2 class="pro-name">{{ project_info.project_title }}</h2>
         <p class="pro-des">Company Name: {{ project_info.company_name }}</p>
         <p class="pro-des">Industry: {{ project_info.industry }}</p>
-        <p class="pro-des" style="color: rgb(143, 51, 192); font-weight: bold;">Location: {{ project_info.location }}</p>
+        <p class="pro-des" style="color: rgb(52, 72, 172); font-weight: bold;">Location: {{ project_info.location }}</p>
         <p class="pro-des">Details: {{ project_info.project_summary }}</p>
         <form action="{{ url_for('staff.staff_match_student') }}" method="POST" class="match-form">
           <input type="hidden" value="{{ student_id }}" name="student_id">
           <input type="hidden" value="{{ project_info.project_id }}" name="project_id">
-          <button type="submit" class="btn btn-outline-primary profilebt staff-submit-btn" style="width: 100%;" 
-          data-project-id="{{ project_info.project_id }}">Match Project</button>
+
+          <div style="position:absolute;bottom:20px;width:300px;">
+            <button type="submit" class="btn btn-outline-primary profilebt staff-submit-btn" style="width: 100%;" 
+            data-project-id="{{ project_info.project_id }}">Match Project</button>
+          </div>
+
         </form>
       </div>
     </div>
@@ -120,8 +124,12 @@
         <form action="{{ url_for('staff.staff_match_student') }}" method="POST" class="match-form">
           <input type="hidden" value="{{ student_id }}" name="student_id">
           <input type="hidden" value="{{ project_info.project_id }}" name="project_id">
-          <button type="submit" class="btn btn-outline-primary profilebt staff-submit-btn" style="width: 100%;" 
-          data-project-id="{{ project_info.project_id }}">Match Project</button>
+
+          <div style="position:absolute;bottom:20px;width:300px;">
+            <button type="submit" class="btn btn-outline-primary profilebt staff-submit-btn" style="width: 100%;" 
+            data-project-id="{{ project_info.project_id }}">Match Project</button>
+          </div>
+
         </form>
       </div>
     </div>

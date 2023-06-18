@@ -84,7 +84,7 @@
             orientation: 'landscape'
           }
         })
-        .output('dataurlnewwindow');
+        .save('wishlist.pdf');
     });
   });
 </script>
@@ -126,7 +126,6 @@
       </div>
 
       <div class="wlist-preview">
-        <!-- <h3><small>Ranking:</small> {{info.ranking}}</h3> -->
         <h3><small>Project ID:</small> {{info.project_id}}</h3>
 
         <h1>{{info.project_title}} </h1>
@@ -281,14 +280,14 @@
 {% elif placements['status'] == 'Processing' %}
 
 <div class="loading-container" style="height:100%;">
-  <!-- <div class="loading-animation"></div> -->
   <h4 class="loading-text" style="margin-top: 50px;color:rgb(92, 92, 163)">We are processing your application...</h4>
 </div>
 
 <div style="margin-top: 50px;text-align: center;">
   <a href="{{url_for('student.wishlist')}}" class="btn btn-outline-primary profilebt">View Your Submission</a>
-  <!-- for later notification url -->
-  <a href="#" class="btn btn-outline-primary profilebt" style="margin-left: 10px;">Check Recent News</a>
+  <!-- for notification url -->
+  <a href="{{url_for('send_notice')}}" class="btn btn-outline-primary profilebt" style="margin-left: 10px;">Check Recent
+    News</a>
 
 </div>
 

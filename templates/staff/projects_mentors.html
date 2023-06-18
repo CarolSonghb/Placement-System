@@ -7,44 +7,46 @@
 {% if projects %}
 
 <h3 class="scd-text" style="font-weight: 700; color:rgb(92, 92, 163);">PROJECTS INFORMATION</h3>
-{% if record %}
-{% endif %}
+
 <h6 class="txt3" style="text-align: center; margin-top: 5%;">Search a Project</h6>
 <form action="{{url_for('staff.comp_projects')}}" method="POST">
   <div class="search-wrap">
-      <div class="search bar1">
+    <div class="search bar1">
       <span class="txt3" style="margin-right: 1%;">by</span>
-      <input type="text" class="searchTerm" id="project_id" name="project_id" placeholder="Project ID">
+      <input type="text" class="searchTerm" id="project_title" name="project_title" placeholder="Project Name">
       <input type="text" class="searchTerm" id="mentor_id" name="mentor_id" placeholder="Mentor ID">
       <input type="text" class="searchTerm" id="company_name" name="company_name" placeholder="Company Name">
       <input type="text" class="searchTerm" id="location" name="location" placeholder="Location">
 
       <button type="submit" class="searchButton">
-          <i class="bi bi-search"></i>
+        <i class="bi bi-search"></i>
       </button>
-      </div>
+    </div>
   </div>
 </form>
 
+{% if record %}
 <h5 class="text-success" style="text-align: center; margin-top: 3%;"> {{record}} results found</h5>
+{% endif %}
+
 <div style="width:100%; margin: 3% auto 3% 3%;">
   <span style="font-style: italic;">* Filter by Placement Status: &nbsp;</span>
   <select id="companySelect" class="custom-select">
-      <option value="" selected disabled>Filter Placement Status</option>
-      <option value="all">All Companies</option>
-      <option value="Full">Placement:  Full</option>
-      <option value="Available">Placement:  Available</option>
+    <option value="" selected disabled>Filter Placement Status</option>
+    <option value="all">All Companies</option>
+    <option value="Full">Placement: Full</option>
+    <option value="Available">Placement: Available</option>
   </select>
 </div>
 
 
 <script>
-  $('#companySelect').on('change', function() {
-  var selectedOption = $(this).val(); 
+  $('#companySelect').on('change', function () {
+    var selectedOption = $(this).val();
 
-  var url = '{{url_for("staff.comp_projects")}}?option=' + selectedOption;
+    var url = '{{url_for("staff.comp_projects")}}?option=' + selectedOption;
 
-  window.location.href = url;
+    window.location.href = url;
   });
 </script>
 
@@ -58,24 +60,31 @@
 
     <div class="scd-card-content">
       <h6 class="pro-cat">Mentor ID: {{project.mentor_id}}</h6>
-      <h2 class="pro-name" style="font-size: 14px;color:rgb(45, 45, 152);font-weight: 600;">{{project.project_title}}</h2>
-      <p class="pro-des">Company Name: <span style="font-size: 14px;color:rgb(45, 45, 152);font-weight: 600;">{{project.company_name}}</span></p>
+      <h2 class="pro-name" style="font-size: 14px;color:rgb(45, 45, 152);font-weight: 600;">{{project.project_title}}
+      </h2>
+      <p class="pro-des">Company Name: <span
+          style="font-size: 14px;color:rgb(45, 45, 152);font-weight: 600;">{{project.company_name}}</span></p>
       <p class="pro-des">Industry: {{project.industry}}</p>
       <p class="current-status">Location: {{project.location}} </p>
       <p class="pro-des">Start Date: {{project.start_date}}</p>
-      <!-- <p class="pro-des">Placement Number: {{project.place_num}}</p> -->
       <p class="pro-des">Available Slots: {{project.place_num - project.confirmed}}</p>
       <p class="pro-des">Placed Students: {{project.confirmed}}</p>
       <p class="pro-des">Details: {{project.project_summary}}</p>
       {% if project.place_num > project.confirmed %}
 
       <div style="position:absolute;bottom:20px;width:300px;">
-        <a href="{{ url_for('staff.match_students_project') }}?project_id={{ project.project_id }}&location={{project.location}}">
+        <a
+          href="{{ url_for('staff.match_students_project') }}?project_id={{ project.project_id }}&location={{project.location}}">
           <button class="btn btn-outline-primary profilebt" style="width:100%;">Match Student</button>
         </a>
       </div>
 
+      {% else %}
+      <div style="position:absolute;bottom:20px;width:300px;">
+        <button class="btn btn-outline-success profilebt" style="width:100%;">Project is Full</button>
+      </div>
       {% endif %}
+
     </div>
   </div>
 </div>
@@ -96,24 +105,25 @@
 
 <h3 class="scd-text" style="color:rgb(92, 92, 163);margin-bottom: 20px; font-weight: 700;"> MENTOR LIST</h3>
 
-{% if record %}
-  <h3 class="scd-text"> {{record}} results found</h3>
-{% endif %}
+
 <form action="{{url_for('staff.all_mentors')}}" method="POST" style="margin:50px auto;">
   <div class="search-wrap">
-      <div class="search bar1">
+    <div class="search bar1">
       <input type="text" class="searchTerm" id="mentor_id" name="mentor_id" placeholder="Mentor ID">
       <input type="text" class="searchTerm" id="company_name" name="company_name" placeholder="Company">
       <input type="text" class="searchTerm" id="first_name" name="first_name" placeholder="First Name">
       <input type="text" class="searchTerm" id="last_name" name="last_name" placeholder="Last Name">
 
       <button type="submit" class="searchButton">
-          <i class="bi bi-search"></i>
+        <i class="bi bi-search"></i>
       </button>
-      </div>
+    </div>
   </div>
 </form>
 
+{% if record %}
+<h5 class="text-success" style="text-align: center; margin-bottom: 5%;"> {{record}} results found</h5>
+{% endif %}
 
 {% for mentor in mentor_list %}
 
@@ -123,24 +133,35 @@
 
     <div class="scd-card-content2">
       <h6 class="pro-cat" style="font-size: 14px;text-align: left;">Mentor ID: {{mentor.mentor_id}}</h6>
-      <h2 class="pro-name"style="font-size: 14px;">{{mentor.first_name}} {{mentor.last_name}}</h2>
-      <p class="pro-des"style="font-size: 14px;">Company Name: {{mentor.company_name}}</p>
-      <p class="pro-des"style="font-size: 14px;">Industry: {{mentor.industry}}</p>
-      <p class="pro-des"style="font-size: 14px;">Email: {{mentor.email}}</p>
-      <p class="pro-des"style="font-size: 14px;">Phone: {{mentor.phone}}</p>
-      <p class="pro-des"style="font-size: 14px;">Loaction: {{mentor.location}}</p>
+      <div style="margin:20px">
+        <h2 class="pro-name" style="font-size: 14px; display:inline;margin-left:20px;">{{mentor.first_name}}
+          {{mentor.last_name}}</h2>
+        <img src="../..{{mentor.link}}" alt="avatar"
+          style="width:50px; height:50px; float:left; display:inline; border-radius: 20px;">
+      </div>
+
+
+      <p class="pro-des" style="font-size: 14px;">Company Name: {{mentor.company_name}}</p>
+      <p class="pro-des" style="font-size: 14px;">Industry: {{mentor.industry}}</p>
+      <p class="pro-des" style="font-size: 14px;">Email: {{mentor.email}}</p>
+      <p class="pro-des" style="font-size: 14px;">Phone: {{mentor.phone}}</p>
+      <p class="pro-des" style="font-size: 14px;">Loaction: {{mentor.location}}</p>
 
       <div class="status">
         <p class="current-status">Industry: {{mentor.industry}}</p>
       </div>
-        
+
+      <div style="position:absolute;bottom:20px;width:100px;">
+        <a href="{{url_for('send_notice')}}?send_to={{mentor.user_name}}" class="btn btn-outline-primary profilebt"
+          role="button">Contact</a>
+      </div>
     </div>
   </div>
 </div>
 {% endfor %}
 
 
-<div class="pagination">
+<div class=" pagination">
   {{pagination.links}}
 </div>
 

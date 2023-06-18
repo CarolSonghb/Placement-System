@@ -11,7 +11,7 @@
     </div>
 
     <div class="inbox-container">
-      <h3 style="margin-bottom: 20px;display: inline-block;">Inbox - {{g.user_name}}</h3>
+      <h3 style="margin-bottom: 20px;display: inline-block;">Inbox</h3>
 
       <div style="float:right;margin-right: 50px;" class="btn btn-outline-primary profilebt noticebtn">
         <button data-bs-toggle="modal" data-bs-target="#notice_draft">
@@ -38,7 +38,11 @@
         
                   <div class="form-group">
                     <span>* {{form.send_to.label}}</span>
+                    {% if send_to %}
+                    {{ form.send_to(type="text", value=send_to, oninput="searchNames(this.value)") }}
+                    {% else %}
                     {{ form.send_to(type="text", oninput="searchNames(this.value)") }}
+                    {% endif %}
                   </div>
                   <div class="dropdown">
                     <ul id="nameList" class="dropdown-menu"></ul>

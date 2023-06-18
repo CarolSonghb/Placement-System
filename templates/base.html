@@ -31,7 +31,7 @@
   <!-- render the css static file -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css')}}" />
 
-  <!-- simon add sweetalert -->
+  <!-- add sweetalert -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/sweetalert.css')}}">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="../static/js/xtalert.js"></script>
@@ -67,33 +67,33 @@
 
       <!-- Display flash message-->
       {% for message in get_flashed_messages(with_categories=True) %}
-        {% if message[0] == 'red' %}
-        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-bottom: 0px;">
-          {{ message[1] }}
+      {% if message[0] == 'red' %}
+      <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-bottom: 0px;">
+        {{ message[1] }}
         {% else %}
         <div class="alert alert-info alert-dismissible fade show" role="alert" style="margin-bottom: 0px;">
           {{ message[1] }}
-      {% endif %}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          {% endif %}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-      {% endfor %}
+        {% endfor %}
 
-      <!-- Content render from templates -->
-      <div id="root"> {% block content %} {% endblock %}</div>
+        <!-- Content render from templates -->
+        <div id="root"> {% block content %} {% endblock %}</div>
 
-      <footer id="footer">
-        {% block footer %}
-        <p>Lincoln Industry Project Placement Management System</p>
-        Copyright © <span id="currentYear">2023</span>
-        by LU-MAC-Group 25
-        {% endblock%}
+        <footer id="footer">
+          {% block footer %}
+          <p>Lincoln Industry Project Placement Management System</p>
+          Copyright © <span id="currentYear">2023</span>
+          by LU-MAC-Group 25
+          {% endblock%}
 
-      </footer>
+        </footer>
+
+      </div>
 
     </div>
-
-  </div>
-  <!-- Footer -->
+    <!-- Footer -->
 
 
 
@@ -112,7 +112,6 @@
       crossorigin="anonymous"></script>
     <!-- multi selection -->
     <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/js/multi-select-tag.js"></script>
-    <!-- breadcrumbs -->
 
 </body>
 

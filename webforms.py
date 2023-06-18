@@ -1,10 +1,10 @@
 from flask_wtf import FlaskForm
-from wtforms import (StringField, DateField, SubmitField, SelectField,  TextAreaField, validators, 
-                     IntegerField, ValidationError, FileField, SelectMultipleField)
-from wtforms.validators import Email, InputRequired, Length, EqualTo
-import mysql.connector
-import connect
+from wtforms import (StringField, SubmitField, SelectField,  TextAreaField, validators,
+                     IntegerField, ValidationError,  SelectMultipleField, BooleanField)
+from wtforms.validators import Length
 from models import run_data
+
+# login form
 
 
 class LoginForm(FlaskForm):
@@ -13,6 +13,8 @@ class LoginForm(FlaskForm):
     password = StringField('Password', validators=[
         validators.input_required()])
     submit = SubmitField('Log In')
+
+# register form
 
 
 class RegisterForm(FlaskForm):
@@ -66,18 +68,16 @@ class RegisterForm(FlaskForm):
         ('Auckland', 'Auckland'), ('Wellington',
                                    'Wellington'), ('Hamilton', 'Hamilton'),
         ('Christchurch', 'Christchurch'), ('Other', 'Other')], validators=[validators.input_required()])
-
-
-    skills = SelectMultipleField('skills', choices=[
-        ('1', 'Python'), ('2','Javascript'), ('3', 'HTML/CSS'),
-        ('4', 'Database/SQL'), ('5', 'User Experience'), 
-        ('6', 'UI Design'), ('7', 'Content Creation'), 
-        ('8', 'Business analysis'), ('9', 'GIS'), 
-        ('10', 'Neural neworks'), ('11', 'Node.js'), 
-        ('12', 'React.js'), ('13', 'Angular.js'), 
-        ], validators=[validators.input_required()])
-    
-
+    # add skills field
+    skills = SelectMultipleField('Skills', choices=[
+        ('1', 'Python'), ('2', 'Javascript'), ('3', 'HTML/CSS'),
+        ('4', 'Database/SQL'), ('5', 'User Experience'),
+        ('6', 'UI Design'), ('7', 'Content Creation'),
+        ('8', 'Business analysis'), ('9', 'GIS'),
+        ('10', 'Neural neworks'), ('11', 'Node.js'),
+        ('12', 'React.js'), ('13', 'Angular.js'),
+    ], validators=[validators.input_required()])
+    # ask student if have their own project
     need_project = SelectField('Need to be placed', choices=[
         ('1', 'Yes'), ('0', 'No')], validators=[validators.input_required()])
 
@@ -85,9 +85,11 @@ class RegisterForm(FlaskForm):
                                      validators=[validators.input_required()])
 
     semester_to_place = SelectField('Semester to place', choices=[
-        ('2', 'Semester 2'), ('1', 'Semester 1')] , validators=[validators.input_required()])
+        ('2', 'Semester 2'), ('1', 'Semester 1')], validators=[validators.input_required()])
 
     submit = SubmitField('Register')
+
+# search form for user to search  out desired information
 
 
 class SearchForm(FlaskForm):
@@ -95,10 +97,13 @@ class SearchForm(FlaskForm):
                          validators.input_required()])
     submit = SubmitField('Search')
 
+# notice form for user to send notice to other
+
 
 class NoticeForm(FlaskForm):
     subject = StringField('subject', validators=[validators.input_required()])
-    send_to =  StringField('send_to', validators=[validators.input_required()])
-    message = TextAreaField('message', validators=[validators.input_required()])
+    send_to = StringField('send_to', validators=[validators.input_required()])
+    message = TextAreaField('message', validators=[
+                            validators.input_required()])
 
     send = SubmitField('send')

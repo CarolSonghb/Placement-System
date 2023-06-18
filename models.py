@@ -55,7 +55,7 @@ def generate_randomint():
     return "".join(random_int)
 
 
-# create pagination func - simon
+# create pagination func
 def paginate_func(content, per_page=10):
     per_page = per_page
     page = request.args.get(get_page_parameter(), type=int, default=1)
@@ -259,8 +259,6 @@ class Projects:
 
         return run_data(base_sql, fetch=2)
 
-        # return inner
-
     def projects_details(self, project_id):
         sql = '''
         select p.project_id, CONCAT(m.first_name,' ',last_name) AS mentor_name, m.company_name, m.industry, 
@@ -319,6 +317,7 @@ class Projects:
                 AND w.project_id= %s AND w.student_id NOT IN ( SELECT student_id FROM placement WHERE project_id = %s)
                 GROUP BY w.student_id, w.project_id,w.ranking, w.submission_status,
                 s.first_name, s.last_name, s.email, s.phone, s.semester_to_place,pl.pl_status
+                having w.submission_status = 'Submitted'
                 ORDER BY w.ranking ASC;'''
         para = (project_id, project_id)
         return run_data(sql, para, fetch=2)
@@ -391,7 +390,7 @@ class Projects:
         return run_data(sql, para, fetch=1)
 
     def match_count(self, project_id):
-        sql = '''SELECT pj.project_id, COUNT(DISTINCT p.student_id) AS student_count, pj.place_num
+        sql = '''SELECT pj.project_id, pj.project_title, COUNT(DISTINCT p.student_id) AS student_count, pj.place_num
                 FROM project as pj
                 left join placement as p on pj.project_id =p.project_id 
                 WHERE pj.project_id = %s'''
@@ -571,7 +570,7 @@ class Staff:
                 JOIN student_skills AS ss ON s.student_id = ss.student_id
                 JOIN skills AS sk ON ss.skill_id = sk.skill_id
                 LEFT JOIN placement AS pl ON ss.student_id = pl.student_id
-                GROUP BY s.student_id , pl.pl_status having 1=1 '''
+                GROUP BY s.student_id , pl.pl_status, pl.project_id having 1=1 '''
 
         if data['student_id']:
             con_sql = f"and LOWER(s.student_id) like LOWER('%{data['student_id']}%')"
@@ -634,13 +633,16 @@ class Staff:
         sql = ''' SELECT m.mentor_id, m.company_name, m.industry, m.location, 
         p.project_id, p.project_title, p.project_summary, p.place_num, (SELECT COUNT(*) FROM placement 
         WHERE project_id = p.project_id AND pl_status = 'matched') AS "students_matched", 
-        ( SELECT COUNT(*) FROM placement WHERE project_id = p.project_id AND pl_status = 'confirmed') AS 'confirmed',
+        ( SELECT COUNT(*) FROM placement WHERE project_title = p.project_title AND pl_status = 'confirmed') AS 'confirmed',
         p.start_date FROM mentor AS m JOIN project AS p ON m.mentor_id = p.mentor_id
         LEFT JOIN placement AS pl ON p.project_id = pl.project_id
         GROUP BY m.mentor_id, p.project_id having 1=1 '''
 
-        if data['project_id']:
-            con_sql = f"and LOWER(p.project_id) like LOWER('%{data['project_id']}%')"
+        # if data['project_id']:
+        #     con_sql = f"and LOWER(p.project_id) like LOWER('%{data['project_id']}%')"
+        #     sql += con_sql
+        if data['project_title']:
+            con_sql = f"and LOWER(p.project_title) like LOWER('%{data['project_title']}%')"
             sql += con_sql
         if data['company_name']:
             con_sql = f"and LOWER(m.company_name) like LOWER('%{data['company_name']}%')"
@@ -655,22 +657,26 @@ class Staff:
         return run_data(sql, fetch=2)
 
     def get_mentor_list(self):
-        sql = ''' SELECT * FROM mentor;'''
+        sql = ''' SELECT m.*, ifnull(u.link, '/static/avatar/test.png') as link
+                    FROM mentor as m
+                    join user as u on m.user_name = u.user_name;'''
         return run_data(sql, fetch=2)
 
     def search_mentor_list(self, data):
-        sql = ''' SELECT * FROM mentor where 1=1 '''
+        sql = ''' SELECT m.*, ifnull(u.link, '/static/avatar/test.png') as link
+                FROM mentor as m
+                join user as u on m.user_name = u.user_name where 1=1 '''
         if data['mentor_id']:
-            con_sql = f"and LOWER(mentor_id) like LOWER('%{data['mentor_id']}%')"
+            con_sql = f"and LOWER(m.mentor_id) like LOWER('%{data['mentor_id']}%')"
             sql += con_sql
         if data['company_name']:
-            con_sql = f"and LOWER(company_name) like LOWER('%{data['company_name']}%')"
+            con_sql = f"and LOWER(m.company_name) like LOWER('%{data['company_name']}%')"
             sql += con_sql
         if data['first_name']:
-            con_sql = f"and LOWER(first_name) like LOWER('%{data['first_name']}%')"
+            con_sql = f"and LOWER(m.first_name) like LOWER('%{data['first_name']}%')"
             sql += con_sql
         if data['last_name']:
-            con_sql = f"and LOWER(last_name) like LOWER('%{data['last_name']}%')"
+            con_sql = f"and LOWER(m.last_name) like LOWER('%{data['last_name']}%')"
             sql += con_sql
 
         return run_data(sql, fetch=2)
@@ -857,10 +863,10 @@ class Notification:
                 LEFT JOIN student AS st ON u.user_name = st.user_name;
             """
 
-        return run_data(sql,fetch=2)
-    
-    def findName(self,user_name):
-        sql="""SELECT u.user_name, CONCAT(COALESCE(s.first_name, m.first_name, st.first_name), ' ', 
+        return run_data(sql, fetch=2)
+
+    def findName(self, user_name):
+        sql = """SELECT u.user_name, CONCAT(COALESCE(s.first_name, m.first_name, st.first_name), ' ', 
                         COALESCE(s.last_name, m.last_name, st.last_name)) AS name
                 FROM user AS u
                 LEFT JOIN staff AS s ON u.user_name = s.user_name
@@ -868,8 +874,7 @@ class Notification:
                 LEFT JOIN student AS st ON u.user_name = st.user_name
                 where u.user_name = %s;"""
         para = (user_name,)
-        return run_data(sql,para,fetch=1)
-
+        return run_data(sql, para, fetch=1)
 
     def searchUsername(self, name):
         sql = """SELECT u.user_name, CONCAT(COALESCE(s.first_name, m.first_name, st.first_name), ' ', 

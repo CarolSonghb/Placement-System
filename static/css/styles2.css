@@ -84,23 +84,6 @@
 
 }
 
-/* simon add new checkbox */
-
-/* .wlist-checkbox-container input[type="checkbox"] {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  border-radius: 50%; 
-  border: 2px solid #000; 
-  width: 20px; 
-  height: 20px;
-  margin-right: 10px; 
-}
-
-.wlist-checkbox-container input[type="checkbox"]:checked {
-  background-color: #000; 
-} */
-/*  */
 
 .wlist-preview {
 	/* background-image: linear-gradient(135deg, #2b4ae7, #4564ff); */
@@ -328,7 +311,7 @@ width:100%;
     border-radius: 5px;
 }
 
-.simon:hover {
+.new-btn:hover {
   color:white !important;
   background-color:rgb(59, 59, 230) !important;
 }
@@ -615,24 +598,17 @@ a.icon-link:hover {
 }
 
 .scd-container{
-  /* margin: 50px 0px 0px 80px; */
   padding: 0 30px;
   height: 550px;
   font-family: 'Montserrat', sans-serif;
-  width : calc((100% - 15px)/3);
+  width : 460px;
   display: inline-block;
-  /* flex: 0 0 calc(33.33% - 80px); */
-  /* margin-right: 20px; */
   margin-bottom: 50px;
 }
 
 .scd-grid{
-  /* max-width: 1000px; */
   width:100%;
   height:100%;
-  /* display: grid;
-  grid-template-columns: repeat(3, 1fr);  */
-  /* grid-gap: 10px; */
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -644,24 +620,17 @@ a.icon-link:hover {
 }
 
 .scd-container2{
-  /* margin: 50px 0px 0px 80px; */
+  width: 360px;
+  margin: 20px 0px 0px 80px; 
   padding: 0 10px;
-  height:360px;
   font-family: 'Montserrat', sans-serif;
-  width : calc((100% - 20px)/4);
   display: inline-block;
-  /* flex: 0 0 calc(33.33% - 80px); */
-  /* margin-right: 20px; */
-  margin-bottom: 50px;
+  margin-bottom: 20px;
 }
 
 .scd-grid2{
-  max-width: 300px;
   width:100%;
-  height:380px;
-  /* display: grid;
-  grid-template-columns: repeat(3, 1fr);  */
-  /* grid-gap: 10px; */
+  height:450px;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -1143,7 +1112,6 @@ cursor:pointer;
     }
 }
 
-/* simon added for search bar */
 
 .bar1 input {
 border: 2px solid #719ded;
@@ -1223,9 +1191,9 @@ font-size: 2rem;
 }
 
 .best-match-heading {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
-  color: #9d50d1;
+  color: #3a47a9;
   text-align: left;
   text-transform: uppercase;
   letter-spacing: 2px;
@@ -1256,4 +1224,30 @@ font-size: 2rem;
 #addform option{
 font-size: 16px;
 width:100%;
+}
+
+
+.present{
+
+  margin-right: 100px;
+  width:40%;
+  box-shadow: 0px 0px 4px 2px rgba(44, 85, 181, 0.5);
+  border-radius: 20px;
+  padding-bottom: 50px;
+}
+
+.presentation{
+  text-align: center;
+  margin:30px 0 30px 0;
+}
+
+.presentation ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.presentation li {
+  display: inline;
+  margin-right: 10px;
 }

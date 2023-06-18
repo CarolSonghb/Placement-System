@@ -9,9 +9,15 @@
 <div class="row profilerow">
 
   <div class="col-md-4 img" style="margin-top: 15px; margin-left: 10%; margin-right:25px;">
-    <img src="{{g.Avatar_link}}" class="avatar" alt="avatar">
+    <img src="{{g.avatar_link}}" class="avatar" alt="avatar">
 
-    <div style="width:100%;display:flex;margin-top: 20px; margin-left: 20%;">
+    <div style="margin-top: 30px; margin-left: 12%;">
+      <h5 style="font-weight: 800;">{{student_info.first_name}} {{student_info.last_name}}
+        ({{student_info.preferred_name}})</h5>
+    </div>
+
+
+    <div style="width:100%;display:flex;margin-top: 20px; margin-left: 11%;">
       <form action="{{url_for('update_avatar')}}" method="POST" enctype="multipart/form-data">
         <button type="button" name="avatarbtn" id="avatarbtn" class="btn btn-outline-primary profilebt">
           <span class="button-content">
@@ -21,7 +27,8 @@
         </button>
         <input type="file" id="avatar" name="avatar" style="display:none" required>
         <p id="file-name-display"></p>
-        <button type="submit" id="upload-button" class="btn btn-primary profilebt" style="display: none; width: 200px;">Upload</button>
+        <button type="submit" id="upload-button" class="btn btn-primary profilebt"
+          style="display: none; width: 200px;">Upload</button>
       </form>
     </div>
 
@@ -53,10 +60,9 @@
     }
   </script>
 
-  <div class="col-md-6 details mt-5" style="margin-top: 0px !important;padding-left: 5%;">
+  <div class="col-md-6 details mt-5 present" style="margin-top: 0px !important;padding-left: 5%;">
     <blockquote class="profilename">
-      <h5 style="font-weight: 800;">{{student_info.first_name}} {{student_info.last_name}}
-        ({{student_info.preferred_name}})</h5>
+
     </blockquote>
     <small>Email:</small>
     <h6>{{student_info.email}}</h6>
@@ -73,7 +79,7 @@
     <small>My CV:</small>
     {% if cv_link and cv_link != 'None'%}
     <a href="{{cv_link}}" download="{{student_info.first_name}}'s CV">
-      <button class="btn-hover color"> Download CV</button>
+      <button class="btn btn-outline-primary profilebt" style="margin-left: 20px;"> Download CV</button>
     </a>
     {% else %}
     <h6>Upload your CV through <span class="edit-profile" style="color: rgb(90, 90, 190); font-weight: 800;">Edit
@@ -83,7 +89,7 @@
     <br>
     <br>
     <button type="button" class="btn btn-outline-primary profilebt" id="myBtn" data-bs-toggle="modal"
-      data-bs-target="#editModal" style="padding: 9px 40px; font-weight: 700;">
+      data-bs-target="#editModal" style="font-weight: 700;">
       Edit Profile
     </button>
 
@@ -199,7 +205,7 @@
             <label style="font-weight: bold;">Upload Your Resume:</label>
             <input type="file" class="form-control" id="cv_link" name="cv_link">
           </div>
-
+        </form>
       </div>
       <p></P>
       <div class="modal-footer  justify-content-between">
@@ -215,8 +221,38 @@
   var btn2 = document.getElementById('updateprofile');
   var form = document.getElementById('updateform');
 
+
   btn2.onclick = function (event) {
     event.preventDefault();
+
+    var firstNameInput = document.getElementById('first_name');
+    var lastNameInput = document.getElementById('last_name');
+    var semesterInput = document.getElementById('semester_to_place');
+
+
+    if (firstNameInput.value.trim() === '') {
+      alert('Please enter your first name.');
+      firstNameInput.focus();
+      return;
+    }
+
+    if (lastNameInput.value.trim() === '') {
+      alert('Please enter your last name.');
+      lastNameInput.focus();
+      return;
+    }
+
+    if (semesterInput.value.trim() === '') {
+      alert('Please enter the semester of placement.');
+      semesterInput.focus();
+      return;
+    }
+
+    if (!/^\d+$/.test(semesterInput.value)) {
+      alert('Invalid input for the semester of placement. Please enter a numeric value.');
+      semesterInput.focus();
+      return;
+    }
 
     xtalert.alertConfirm({
       "confirmText": "Confirm",

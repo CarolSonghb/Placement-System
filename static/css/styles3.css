@@ -694,20 +694,20 @@ form .reg-button input:hover {
 
 /* dashboard background */
 .dashboard {
-  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.6) 100%), url('https://img-qn.51miz.com/Element/00/81/19/43/63187c84_E811943_c41a1154.jpg!/quality/90/unsharp/true/compress/true/format/jpg/fw/720');
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.6) 100%), url('../img/banner2.jpg');
   background-repeat: no-repeat;
   background-size: 100%;
-  height: 300px;
+  height: 200px;
   background-position: 90% 50%;
   position: relative;
-  margin-top: 2%;
+
 }
 
 .dashheader {
   position: absolute;
   margin: 3% auto 2% 8%;
   color: rgb(71, 71, 210);
-  font-weight: 400;
+  font-family: 'Fraunces', serif;
 }
 
 .dashfunc .card-body:hover,
@@ -718,7 +718,7 @@ form .reg-button input:hover {
 
 .dashsecond {
   margin: 10% auto 2% 15%;
-  color:rgb(88, 88, 92);
+  color: rgb(88, 88, 92);
   font-style: italic;
   position: absolute;
   font-weight: 400;
@@ -767,7 +767,6 @@ form .reg-button input:hover {
   color: #666666;
 }
 
-/* simon edit dashboard flex */
 
 .dashfunc {
   display: flex;
@@ -795,7 +794,7 @@ form .reg-button input:hover {
   align-items: center;
   margin: 5% auto;
   box-shadow: 0 0 10px rgba(31, 103, 228, 0.5);
-  padding:3%;
+  padding: 3%;
 }
 
 .wrap-password {
@@ -901,13 +900,14 @@ form .reg-button input:hover {
 .profilename {
   margin: 8% 0px;
   text-align: center;
-  width:300px;
+  width: 300px;
 }
 
 .profilebt {
   font-weight: 600;
   border-radius: 12px;
 }
+
 .button-content {
   display: flex;
   align-items: center;
@@ -917,11 +917,13 @@ form .reg-button input:hover {
   margin-right: 8px;
   font-size: 20px;
 }
+
 .cardbt {
   border-radius: 12px;
   font-size: small;
   padding: 6px;
 }
+
 /* filter id */
 .custom-select {
   display: inline-block;
@@ -945,7 +947,7 @@ form .reg-button input:hover {
   pointer-events: none;
 }
 
-/* for notification - simon */
+/* for notification  */
 
 .wrap-login2 {
   width: 1000px;
@@ -953,10 +955,7 @@ form .reg-button input:hover {
   opacity: 0.9;
   border-radius: 10px;
   overflow: hidden;
-  /* display: flex; */
-  /* flex-wrap: wrap; */
   margin-bottom: 250px;
-  /* justify-content: start; */
   padding: 30px 30px 30px 30px;
 }
 
@@ -976,71 +975,127 @@ form .reg-button input:hover {
   transform: scale(1.5);
 }
 
-.email-item input{
+.email-item input {
   margin-right: 20px;
 }
 
 .email-item {
   background-color: #fff;
   padding: 10px;
-  /* margin-bottom: 10px; */
-  /* margin-right: 50px; */
 }
 
 
 
 .email-item .sender {
   font-weight: bold;
-  display:inline-block;
-  width:200px;
+  display: inline-block;
+  width: 200px;
 }
 
 .email-item .subject {
-  /* color: #666; */
-  display:inline-block;
-  width:380px;
+  display: inline-block;
+  width: 380px;
 }
 
 .email-item .timestamp {
-  /* color: #999; */
-  display:inline-block;
-  width:200px;
+  display: inline-block;
+  width: 200px;
 }
 
-.noticebtn button{
+.noticebtn button {
   font-size: 14px;
 }
 
-.noticebtn button:hover{
-  color:#fff;
+.noticebtn button:hover {
+  color: #fff;
 }
 
-#notice_draft .form-group input{
-  width:80%;
+#notice_draft .form-group input {
+  width: 80%;
   margin-bottom: 10px;
 }
 
-#notice_draft .form-group label{
-  width:20%;
+#notice_draft .form-group label {
+  width: 20%;
   margin-bottom: 10px;
 }
 
-#notice_draft .form-group{
-  display:flex;
+#notice_draft .form-group {
+  display: flex;
   justify-content: space-between;
-  padding:20px 20px 0 20px;
+  padding: 20px 20px 0 20px;
 }
 
-#notice_draft .form-group textarea{
-  width:80%;
-  height:200px;
+#notice_draft .form-group textarea {
+  width: 80%;
+  height: 200px;
 }
 
-#notice_draft .modal-dialog{
+#notice_draft .modal-dialog {
   max-width: 800px;
   border-radius: 5px;
 }
 
 /* */
+.no_result_notice {
+  background-color: #f2f2f1;
+  width: 100%;
+  min-height: 200px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin-top: 10%;
+}
 
+#interset_form .form-group input {
+  width: 80%;
+  margin-bottom: 10px;
+}
 
+#interset_form .form-group label {
+  width: 20%;
+  margin-bottom: 10px;
+}
+
+#interset_form .form-group {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 20px 0 20px;
+}
+
+#interset_form .form-group textarea {
+  width: 80%;
+  height: 200px;
+}
+
+#interset_form .modal-dialog {
+  max-width: 800px;
+  border-radius: 5px;
+}
+
+.button-container {
+  margin-top: 8%;
+  margin-bottom: 3%;
+  display: flex;
+  gap: 80px;
+
+}
+
+.button1-container {
+  margin: 5% auto 3% auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.button-container #goBack {
+  margin: 0;
+}
+
+.button-container a,
+.button1-container a {
+  color:white;
+  font-family: Graphik, sans-serif;
+  font-size: 16px;
+}

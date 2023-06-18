@@ -10,7 +10,11 @@
 <div class="row profilerow">
 
   <div class="col-md-4 img" style="margin-top: 15px; margin-left: 10%; margin-right:25px;">
-    <img src="{{g.Avatar_link}}" class="avatar" alt="avatar">
+    <img src="{{g.avatar_link}}" class="avatar" alt="avatar">
+    <div style="margin-left: 16%;margin-top: 20px;">
+      <h5 style="font-weight: 800;">{{staff_info.first_name}} {{staff_info.last_name}}</h5>
+
+    </div>
     <div style="width:300px;text-align: center;margin-top: 20px;">
       <form action="{{url_for('update_avatar')}}" method="POST" enctype="multipart/form-data">
         <button type="button" name="avatarbtn" id="avatarbtn" class="btn btn-outline-primary profilebt">
@@ -52,10 +56,9 @@
     }
   </script>
 
-  <div class="col-md-6 details" style="margin-top: 0px !important;padding-left: 5%;">
+  <div class="col-md-6 details present" style="margin-top: 0px !important;padding-left: 5%;">
 
     <blockquote class="profilename">
-      <h5 style="font-weight: 800;">{{staff_info.first_name}} {{staff_info.last_name}}</h5>
     </blockquote>
     <small>Staff ID:</small>
     <h6>{{staff_info.staff_id}}</h6>
@@ -109,12 +112,16 @@
             <input type="text" onkeypress="return /[0-9]/i.test(event.key)" minlength="7" class="form-control"
               id="phone" name="phone" value="{{staff_info.phone}}" required>
           </div>
+
+          <div class="modal-footer  justify-content-between">
+            <button class="btn btn-primary modal-btn float-left" type="submit" id="staffprofile">Update</button>
+            <button type="button" class="btn btn-secondary float-right" data-bs-dismiss="modal">Close</button>
+          </div>
+
+        </form>
       </div>
       <br>
-      <div class="modal-footer  justify-content-between">
-        <button class="btn btn-primary modal-btn float-left" type="submit" id="staffprofile">Update</button>
-        <button type="button" class="btn btn-secondary float-right" data-bs-dismiss="modal">Close</button>
-      </div>
+
     </div>
   </div>
 </div>
@@ -125,6 +132,29 @@
 
   btn6.onclick = function (event) {
     event.preventDefault();
+
+    var firstNameInput = document.getElementById('first_name');
+    var lastNameInput = document.getElementById('last_name');
+    var emailInput = document.getElementById('email');
+
+    if (firstNameInput.value.trim() === '') {
+      alert('Please enter your first name.');
+      firstNameInput.focus();
+      return;
+    }
+
+    if (lastNameInput.value.trim() === '') {
+      alert('Please enter your last name.');
+      lastNameInput.focus();
+      return;
+    }
+
+    if (emailInput.value.trim() === '') {
+      alert('Please enter your email.');
+      emailInput.focus();
+      return;
+    }
+
 
     xtalert.alertConfirm({
       "confirmText": "Confirm",
@@ -137,6 +167,7 @@
       }
     });
   };
+
 </script>
 
 
