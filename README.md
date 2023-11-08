@@ -1,4 +1,8 @@
 # comp639-2023-s1-project2-group25
+You can test the system using  
+Mentor: geoffc   1111  
+Staff: adupont    1111  
+Student: abrown    1111
 
 Our group project is aimed to create the **Industry Project Placement System** which manages the industry placements for students. The system can manage both industries and students. It can also allocate a project to each student based on the nature of the project and the student’s skill sets.
 
