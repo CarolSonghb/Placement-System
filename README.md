@@ -3,7 +3,8 @@
 Mentor: geoffc   1111  
 Staff: adupont    1111  
 Student: abrown    1111
---------------------------------------------------------
+
+------------------------------
 Our group project is aimed to create the **Industry Project Placement System** which manages the industry placements for students. The system can manage both industries and students. It can also allocate a project to each student based on the nature of the project and the student’s skill sets.
 
 Three types of users are involved, specifically, ***student, Industry Mentors, and Staff in-charge of the industry project***, with different access levels to a range of functions in the system. Logging in to the system with an email address and the resetting password option are available for all types of users. 
